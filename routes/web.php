@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ManajemenUserController;
+use App\Http\Controllers\QrCodeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,7 +20,7 @@ use App\Http\Controllers\ManajemenUserController;
 // Route::get('/', function () {
 //     return view('welcome');
 // });
-
+Route::get('/generate-and-send-qr-code', [QrCodeController::class, 'generateAndSendQrCode']);
 Route::middleware(['guest'])->group(function () {
     Route::get('/', [
         LoginController::class, 'index'
