@@ -1,0 +1,31 @@
+.upload-container {
+    display: flex;
+    flex-direction: column; /* Mengatur arah fleks menjadi kolom */
+    align-items: center; /* Mengatur item agar berada di tengah secara horizontal */
+    justify-content: center; /* Mengatur item agar berada di tengah secara vertikal */
+}
+.upload-title {
+    align-items: center; /* Mengatur item agar berada di tengah secara horizontal */
+    justify-content: center; /* Mengatur item agar berada di tengah secara vertikal */
+}
+
+.upload-box,
+.form-box {
+    width: 100%; /* Atur lebar sesuai kebutuhan Anda */
+    padding: 80px;
+    background-color: #f8f9fa;
+    border: 2px dashed #ced4da;
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.form-box {
+    margin-bottom: 0; /* Menghapus margin di bagian bawah form-box */
+}
+
+.custom-button {
+    width: 50%;
+}
+.custom-button-back {
+    width: 49%;
+}
