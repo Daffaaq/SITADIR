@@ -11,7 +11,7 @@
                 <div class="sidebar-brand-icon rotate-n-15">
                     <i class="fas fa-laugh-wink"></i>
                 </div>
-                <div class="sidebar-brand-text mx-3">SCBD</div>
+                <div class="sidebar-brand-text mx-3">SITADIR</div>
             </a>
 
             <!-- Divider -->
@@ -33,7 +33,7 @@
             </div>
 
             <!-- Nav Item - Pages Collapse Menu -->
-            <li class="nav-item">
+            {{-- <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMain"
                     aria-expanded="true" aria-controls="collapseTwo">
                     <i class="fas fa-fw fa-building"></i>
@@ -48,9 +48,9 @@
                             href="{{ url('/superadmin/SO') }}">organizational structure</a>
                     </div>
                 </div>
-            </li>
+            </li> --}}
             <!-- Nav Item - Pages Collapse Menu -->
-            <li class="nav-item">
+            {{-- <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
                     aria-expanded="true" aria-controls="collapseTwo">
                     <i class="fas fa-fw fa-layer-group"></i>
@@ -69,30 +69,30 @@
                             href="{{ url('/superadmin/categoryFile') }}">File</a>
                     </div>
                 </div>
-            </li>
+            </li> --}}
 
             <li class="nav-item @active('superadmin/Article')">
                 <a class="nav-link" href="{{ url('/superadmin/Article') }}">
                     <i class="fas fa-fw fa-newspaper"></i>
-                    <span>Article</span>
+                    <span>Laporan Absensi</span>
                 </a>
             </li>
-            <li class="nav-item @active('superadmin/Galery')">
+            {{-- <li class="nav-item @active('superadmin/Galery')">
                 <a class="nav-link" href="{{ url('/superadmin/Galery') }}">
                     <i class="fas fa-fw fa-camera"></i>
                     <span>Galery</span></a>
-            </li>
-            <li class="nav-item @active('superadmin/Aspiration')">
+            </li> --}}
+            {{-- <li class="nav-item @active('superadmin/Aspiration')">
                 <a class="nav-link" href="{{ url('/superadmin/Aspiration') }}">
                     <i class="fas fa-fw fa-exclamation-triangle"></i>
                     <span>Aspirasi</span></a>
-            </li>
+            </li> --}}
 
-            <li class="nav-item @active('superadmin/File')">
+            {{-- <li class="nav-item @active('superadmin/File')">
                 <a class="nav-link" href="{{ url('/superadmin/File') }}">
                     <i class="fas fa-fw fa-file"></i>
                     <span>Files</span></a>
-            </li>
+            </li> --}}
 
             <!-- Divider -->
             <hr class="sidebar-divider">
@@ -102,8 +102,8 @@
                 Addons
             </div>
 
-            <li class="nav-item @active('superadmin/Users')">
-                <a class="nav-link" href="{{ url('/superadmin/Users') }}">
+            <li class="nav-item @active('dashboardSuperadmin/Users')">
+                <a class="nav-link" href="{{ url('/dashboardSuperadmin/Users') }}">
                     <i class="fas fa-fw fa-user"></i>
                     <span>Users</span></a>
             </li>

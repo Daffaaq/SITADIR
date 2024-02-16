@@ -30,19 +30,19 @@ class LoginController extends Controller
 
         if (Auth::attempt($infologin)) {
             $user = Auth::user();
-            if ($user->status === 'aktif') {
-                if ($user->role === 'pegawai') {
-                    return redirect('dashboardPegawai');
-                } elseif ($user->role === 'superadmin') {
-                    return redirect('dashboardSuperadmin');
-                } elseif ($user->role === 'kasubag umum') {
-                    return redirect('dashboardKasubag');
-                }
+            // dd($infologin);
+            // dd($user);
+            if ($user->role === 'pegawai') {
+                return redirect('dashboardPegawai');
+            } elseif ($user->role === 'superadmin') {
+                return redirect('dashboardSuperadmin');
+            } elseif ($user->role === 'kasubag umum') {
+                return redirect('dashboardKasubag');
             } else {
-                return redirect()->route('login')->withErrors('Akun Anda tidak aktif. Harap hubungi administrator.')->withInput();
+                return redirect()->route('login')->withErrors('Role pengguna tidak valid')->withInput();
             }
         } else {
-            return redirect()->route('login')->withErrors('Email dan password tidak sesuai')->withInput(); // Mengubah pesan error
+            return redirect()->route('login')->withErrors('Email dan password tidak sesuai')->withInput();
         }
     }
 

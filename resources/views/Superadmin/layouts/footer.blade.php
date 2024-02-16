@@ -7,7 +7,7 @@
      <footer class="sticky-footer bg-white">
          <div class="container my-auto">
              <div class="copyright text-center my-auto">
-                 <span>Copyright &copy; SCBD 2023</span>
+                 <span>Copyright &copy; SITADIR 2024</span>
              </div>
          </div>
      </footer>
@@ -26,6 +26,8 @@
 
  <!-- Custom scripts for all pages-->
  <script src="{{ asset('SbAdmin/js/sb-admin-2.min.js') }}"></script>
+ {{-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> --}}
+
 
  <!-- Page level plugins -->
  {{-- <script src="{{asset('SbAdmin/vendor/chart.js/Chart.min.js') }}"></script> --}}
