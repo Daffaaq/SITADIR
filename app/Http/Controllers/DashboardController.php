@@ -10,4 +10,8 @@ class DashboardController extends Controller
     {
         return view('Superadmin.Dashboard.index');
     }
+    public function indexKaryawan()
+    {
+        return view('Karyawan.Dashboard.index');
+    }
 }

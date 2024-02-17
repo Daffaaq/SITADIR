@@ -6,6 +6,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ManajemenUserController;
 use App\Http\Controllers\QrCodeController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\PermissionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,6 +30,7 @@ Route::middleware(['guest'])->group(function () {
     Route::post('/', [LoginController::class, 'login']);
 });
 Route::get('/logout', [LoginController::class, 'logout']);
+
 Route::middleware(['auth', 'checkStatus:aktif', 'check.role:superadmin'])->group(function () {
     Route::get('/dashboardSuperadmin', [DashboardController::class, 'index']);
     Route::prefix('/dashboardSuperadmin')->group(function () {
@@ -43,6 +45,16 @@ Route::middleware(['auth', 'checkStatus:aktif', 'check.role:superadmin'])->group
     Route::prefix('/dashboardSuperadmin')->group(function () {
         Route::get('/Profiles', [ProfileController::class, 'index']);
         Route::put('/Profiles/update/{id}', [ProfileController::class, 'updateSuperadmin']);
+    });
+    // Rute lain untuk dashboard superadmin
+});
+Route::middleware(['auth', 'checkStatus:aktif', 'check.role:karyawan'])->group(function () {
+    Route::get('/dashboardkaryawan', [DashboardController::class, 'indexKaryawan']);
+    Route::prefix('/dashboardkaryawan')->group(function () {
+        Route::get('/Permission', [PermissionController::class, 'index']);
+        Route::get('/Permission/create', [PermissionController::class, 'create']);
+        Route::post('/Permission/store', [PermissionController::class, 'store']);
+        Route::get('/Permission/data', [PermissionController::class, 'json']);
     });
     // Rute lain untuk dashboard superadmin
 });

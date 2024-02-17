@@ -51,7 +51,7 @@ class UsersSeeder extends Seeder
             ],
             [
                 'name' => 'Karyawan',
-                'email' => 'karyawan@example.com',
+                'email' => 'karyawan@gmail.com',
                 'role' => 'karyawan',
                 'status' => 'aktif',
                 'email_verified_at' => now(),

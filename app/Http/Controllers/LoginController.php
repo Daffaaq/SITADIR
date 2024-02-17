@@ -32,8 +32,8 @@ class LoginController extends Controller
             $user = Auth::user();
             // dd($infologin);
             // dd($user);
-            if ($user->role === 'pegawai') {
-                return redirect('dashboardPegawai');
+            if ($user->role === 'karyawan') {
+                return redirect('dashboardkaryawan');
             } elseif ($user->role === 'superadmin') {
                 return redirect('dashboardSuperadmin');
             } elseif ($user->role === 'kasubag umum') {
