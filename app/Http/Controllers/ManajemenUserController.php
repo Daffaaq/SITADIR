@@ -164,7 +164,7 @@ class ManajemenUserController extends Controller
             // Periksa apakah password yang dimasukkan sesuai dengan yang ada di database setelah pembaruan
             $passwordMatch = $changedPassword ? Hash::check($request->password, $user->password) : true;
 
-            if ($passwordMatch) {
+            if ($changedPassword && $passwordMatch) {
                 return redirect('/dashboardSuperadmin/Users')->with('error', 'User update failed because the new password is the same as the current password.');
             }
 
@@ -183,13 +183,13 @@ class ManajemenUserController extends Controller
             }
         } else {
             // Periksa apakah ada perubahan pada password pengguna
-            $changedPassword = $request->filled('password') && $request->password !== $user->password;
+            $changedPassword = $request->filled('password');
 
             // Periksa apakah password yang dimasukkan sesuai dengan yang ada di database setelah pembaruan
             $passwordMatch = $changedPassword ? Hash::check($request->password, $user->password) : true;
 
             // Jika password yang dimasukkan sama dengan yang ada di database
-            if ($passwordMatch) {
+            if ($changedPassword && $passwordMatch) {
                 return redirect('/dashboardSuperadmin/Users')->with('error', 'User update failed because the new password is the same as the current password.');
             }
 

@@ -5,6 +5,7 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ManajemenUserController;
 use App\Http\Controllers\QrCodeController;
+use App\Http\Controllers\ProfileController;
 
 /*
 |--------------------------------------------------------------------------
@@ -38,6 +39,10 @@ Route::middleware(['auth', 'checkStatus:aktif', 'check.role:superadmin'])->group
         Route::put('/Users/update/{id}', [ManajemenUserController::class, 'update']);
         Route::delete('/Users/destroy/{id}', [ManajemenUserController::class, 'destroy']);
         Route::get('/Users/data', [ManajemenUserController::class, 'json']);
+    });
+    Route::prefix('/dashboardSuperadmin')->group(function () {
+        Route::get('/Profiles', [ProfileController::class, 'index']);
+        Route::put('/Profiles/update/{id}', [ProfileController::class, 'updateSuperadmin']);
     });
     // Rute lain untuk dashboard superadmin
 });
