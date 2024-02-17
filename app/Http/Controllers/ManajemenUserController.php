@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class ManajemenUserController extends Controller
 {
@@ -91,6 +92,55 @@ class ManajemenUserController extends Controller
     /**
      * Update the specified resource in storage.
      */
+    // public function update(Request $request, string $id)
+    // {
+    //     // Ambil data user berdasarkan ID
+    //     $user = User::findOrFail($id);
+
+    //     // Validasi input
+    //     $request->validate([
+    //         'name' => 'required',
+    //         'email' => 'required|email|unique:users,email,' . $id,
+    //         'password' => 'nullable',
+    //         'role' => 'required',
+    //         'status' => 'required',
+    //     ]);
+
+    //     // Jika pengguna yang sedang login sedang mengedit data mereka sendiri,
+    //     // peran akan tetap sama seperti sebelumnya
+    //     if ($user->id === Auth::id()) {
+    //         // Periksa apakah pengguna mengubah email atau password
+    //         $changedEmail = $request->email !== $user->email;
+    //         $changedPassword = $request->filled('password');
+
+    //         // Update data user
+    //         $user->update([
+    //             'name' => $request->name,
+    //             'email' => $request->email,
+    //             'password' => $request->filled('password') ? bcrypt($request->password) : $user->password,
+    //             'role' => 'superadmin',
+    //             'status' => 'aktif',
+    //         ]);
+
+    //         // Jika pengguna mengubah email atau password, logout setelah 5 detik
+    //         if ($changedEmail || $changedPassword) {
+    //             return redirect('/dashboardSuperadmin/Users')
+    //                 ->with('info', 'User updated successfully. Logging out in 5 seconds...');
+    //         }
+    //     } else {
+    //         // Update data user
+    //         $user->update([
+    //             'name' => $request->name,
+    //             'email' => $request->email,
+    //             'password' => $request->filled('password') ? bcrypt($request->password) : $user->password,
+    //             'role' => $request->role,
+    //             'status' => $request->status,
+    //         ]);
+    //     }
+
+    //     // Redirect dengan pesan sukses
+    //     return redirect('/dashboardSuperadmin/Users ')->with('success', 'User updated successfully');
+    // }
     public function update(Request $request, string $id)
     {
         // Ambil data user berdasarkan ID
@@ -111,35 +161,52 @@ class ManajemenUserController extends Controller
             // Periksa apakah pengguna mengubah email atau password
             $changedEmail = $request->email !== $user->email;
             $changedPassword = $request->filled('password');
+            // Periksa apakah password yang dimasukkan sesuai dengan yang ada di database setelah pembaruan
+            $passwordMatch = $changedPassword ? Hash::check($request->password, $user->password) : true;
+
+            if ($passwordMatch) {
+                return redirect('/dashboardSuperadmin/Users')->with('error', 'User update failed because the new password is the same as the current password.');
+            }
 
             // Update data user
             $user->update([
                 'name' => $request->name,
                 'email' => $request->email,
-                'password' => $request->filled('password') ? bcrypt($request->password) : $user->password,
+                // Jika password yang dimasukkan tidak kosong, enkripsi password baru
+                'password' => $changedPassword ? bcrypt($request->password) : $user->password,
                 'role' => 'superadmin',
                 'status' => 'aktif',
             ]);
-
             // Jika pengguna mengubah email atau password, logout setelah 5 detik
             if ($changedEmail || $changedPassword) {
-                return redirect('/dashboardSuperadmin/Users')
-                    ->with('info', 'User updated successfully. Logging out in 5 seconds...');
+                return redirect('/dashboardSuperadmin/Users')->with('info', 'User updated successfully. Logging out in 5 seconds...');
             }
         } else {
+            // Periksa apakah ada perubahan pada password pengguna
+            $changedPassword = $request->filled('password') && $request->password !== $user->password;
+
+            // Periksa apakah password yang dimasukkan sesuai dengan yang ada di database setelah pembaruan
+            $passwordMatch = $changedPassword ? Hash::check($request->password, $user->password) : true;
+
+            // Jika password yang dimasukkan sama dengan yang ada di database
+            if ($passwordMatch) {
+                return redirect('/dashboardSuperadmin/Users')->with('error', 'User update failed because the new password is the same as the current password.');
+            }
+
             // Update data user
             $user->update([
                 'name' => $request->name,
                 'email' => $request->email,
-                'password' => $request->filled('password') ? bcrypt($request->password) : $user->password,
+                // Jika password yang dimasukkan tidak kosong, enkripsi password baru
+                'password' => $changedPassword ? bcrypt($request->password) : $user->password,
                 'role' => $request->role,
                 'status' => $request->status,
             ]);
         }
 
-        // Redirect dengan pesan sukses
-        return redirect('/dashboardSuperadmin/Users ')->with('success', 'User updated successfully');
+        return redirect('/dashboardSuperadmin/Users')->with('success', 'User updated successfully');
     }
+
 
     /**
      * Remove the specified resource from storage.
