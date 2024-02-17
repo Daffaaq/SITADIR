@@ -15,7 +15,7 @@
                                 </ul>
                             </div>
                         @endif
-                        <form method="POST" action="{{ url('/superadmin/Users/update/' . $users->id) }}">
+                        <form method="POST" action="{{ url('/dashboardSuperadmin/Users/update/' . $users->id) }}">
                             @csrf
                             @method('PUT')
                             <!-- Name -->
@@ -44,6 +44,20 @@
                                         Superadmin</option>
                                     <option value="admin" {{ $users->role == 'admin' ? 'selected' : '' }}>Admin</option>
                                 </select>
+                            </div>
+                            <!-- Status -->
+                            <div class="form-group">
+                                <label>Status:</label><br>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="status" id="aktif"
+                                        value="aktif" {{ $users->status == 'aktif' ? 'checked' : '' }}>
+                                    <label class="form-check-label" for="aktif">Aktif</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="status" id="nonaktif"
+                                        value="nonaktif" {{ $users->status == 'nonaktif' ? 'checked' : '' }}>
+                                    <label class="form-check-label" for="nonaktif">Nonaktif</label>
+                                </div>
                             </div>
 
                             <div class="row mt-3">

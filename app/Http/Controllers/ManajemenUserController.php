@@ -68,7 +68,7 @@ class ManajemenUserController extends Controller
         ]);
 
         return redirect('/dashboardSuperadmin/Users')
-        ->with('success', 'User created successfully.');
+            ->with('success', 'User created successfully.');
     }
 
     /**
@@ -123,8 +123,8 @@ class ManajemenUserController extends Controller
 
             // Jika pengguna mengubah email atau password, logout setelah 5 detik
             if ($changedEmail || $changedPassword) {
-                return redirect('/superadmin/Users')
-                ->with('info', 'User updated successfully. Logging out in 5 seconds...');
+                return redirect('/dashboardSuperadmin/Users')
+                    ->with('info', 'User updated successfully. Logging out in 5 seconds...');
             }
         } else {
             // Update data user
@@ -138,7 +138,7 @@ class ManajemenUserController extends Controller
         }
 
         // Redirect dengan pesan sukses
-        return redirect('/superadmin/Users')->with('success', 'User updated successfully');
+        return redirect('/dashboardSuperadmin/Users ')->with('success', 'User updated successfully');
     }
 
     /**
