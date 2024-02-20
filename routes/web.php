@@ -54,6 +54,9 @@ Route::middleware(['auth', 'checkStatus:aktif', 'check.role:karyawan'])->group(f
         Route::get('/Permission', [PermissionController::class, 'index']);
         Route::get('/Permission/create', [PermissionController::class, 'create']);
         Route::post('/Permission/store', [PermissionController::class, 'store']);
+        Route::get('/Permission/edit/{id}', [PermissionController::class, 'edit']);
+        Route::put('/Permission/update/{id}', [PermissionController::class, 'update']);
+        Route::delete('/Permission/destroy/{id}', [PermissionController::class, 'destroy']);
         Route::get('/Permission/data', [PermissionController::class, 'json']);
     });
     // Rute lain untuk dashboard superadmin

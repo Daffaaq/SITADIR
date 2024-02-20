@@ -38,8 +38,8 @@ class PermissionController extends Controller
                 return $period;
             })
             ->addColumn('action', function ($row) {
-                $editUrl = url('/dashboardSuperadmin/Users/edit/' . $row->id);
-                $deleteUrl = url('/dashboardSuperadmin/Users/destroy/' . $row->id);
+                $editUrl = url('/dashboardkaryawan/Permission/edit/' . $row->id);
+                $deleteUrl = url('/dashboardkaryawan/Permission/destroy/' . $row->id);
 
                 return '<a href="' . $editUrl . '">Edit</a> | <a href="#" class="delete-users" data-url="' . $deleteUrl . '">Delete</a>';
             })
@@ -120,7 +120,7 @@ class PermissionController extends Controller
     public function edit(string $id)
     {
         $permission = Permission::find($id);
-        return view('permissions.edit', compact('permission'));
+        return view('Karyawan.Permission.edit', compact('permission'));
     }
 
     /**
@@ -132,8 +132,24 @@ class PermissionController extends Controller
         $request->validate([
             'explanation' => 'required',
             'permission_type' => 'required',
-            'start_date' => 'required|date',
-            'end_date' => 'required|date|after:start_date',
+            'start_date' => ['required', 'date', function ($attribute, $value, $fail) {
+                // Periksa apakah tanggal mulai jatuh pada hari Sabtu atau Minggu
+                $startDate = Carbon::parse($value);
+                if ($startDate->isWeekend()) {
+                    $fail('The start date cannot be on a weekend.');
+                }
+            }],
+            'end_date' => ['required', 'date', 'after:start_date', function ($attribute, $value, $fail) use ($request) {
+                // Periksa apakah tanggal akhir jatuh pada hari Sabtu atau Minggu
+                $endDate = Carbon::parse($value);
+                if ($endDate->isWeekend()) {
+                    $fail('The end date cannot be on a weekend.');
+                }
+                // Periksa apakah tanggal akhir sama dengan tanggal mulai
+                if ($request->start_date === $value) {
+                    $fail('The end date cannot be the same as the start date.');
+                }
+            }],
         ]);
 
         // Temukan permission berdasarkan ID
@@ -141,14 +157,14 @@ class PermissionController extends Controller
 
         // Periksa apakah pengguna yang mengakses memiliki akses untuk mengedit permission
         if ($permission->user_id !== Auth::id()) {
-            return redirect()->route('permissions.index')->with('error', 'You are not authorized to update this permission.');
+            return redirect('/dashboardkaryawan/Permission')->with('error', 'You are not authorized to update this permission.');
         }
 
         // Update permission dengan data baru
         $permission->update($request->all());
 
         // Mengembalikan response dengan pesan sukses
-        return redirect()->route('permissions.index')->with('success', 'Permission updated successfully.');
+        return redirect('/dashboardkaryawan/Permission')->with('success', 'Permission updated successfully.');
     }
 
     /**
@@ -158,8 +174,69 @@ class PermissionController extends Controller
     {
         $permission = Permission::findOrFail($id);
 
+        // Periksa apakah status permission sudah approved atau rejected
+        if ($permission->status === 'approved' || $permission->status === 'rejected') {
+            return response()->json(['error' => 'Permission with status approved or rejected cannot be deleted.'], 403);
+        }
+
         $permission->delete();
 
         return response()->json(['message' => 'Permission deleted successfully.']);
+    }
+
+    public function approve(Request $request, $id)
+    {
+        // Temukan permission berdasarkan ID
+        $permission = Permission::findOrFail($id);
+
+        // Periksa apakah pengguna yang melakukan approval adalah supervisor yang sesuai
+        // Misalnya, di sini kita menganggap supervisor memiliki role dengan nama 'supervisor'
+        if (!$request->user()->hasRole('supervisor')) {
+            return redirect()->back()->with('error', 'You are not authorized to approve permissions.');
+        }
+
+        // Lakukan validasi terhadap data yang diterima dari form approval
+        $request->validate([
+            'supervisor_comment' => 'nullable|string',
+            'supervisor_letter' => 'nullable|string',
+        ]);
+
+        // Update data permission dengan informasi dari form approval
+        $permission->update([
+            'status' => 'approved',
+            'supervisor_comment' => $request->supervisor_comment,
+            'supervisor_letter' => $request->supervisor_letter,
+        ]);
+
+        // Redirect kembali ke halaman sebelumnya dengan pesan sukses
+        return redirect()->back()->with('success', 'Permission approved successfully.');
+    }
+
+    public function reject(Request $request, $id)
+    {
+        // Temukan permission berdasarkan ID
+        $permission = Permission::findOrFail($id);
+
+        // Periksa apakah pengguna yang melakukan penolakan adalah supervisor yang sesuai
+        // Misalnya, di sini kita menganggap supervisor memiliki role dengan nama 'supervisor'
+        if (!$request->user()->hasRole('supervisor')) {
+            return redirect()->back()->with('error', 'You are not authorized to reject permissions.');
+        }
+
+        // Lakukan validasi terhadap data yang diterima dari form penolakan
+        $request->validate([
+            'supervisor_comment' => 'nullable|string',
+            'supervisor_letter' => 'nullable|string',
+        ]);
+
+        // Update data permission dengan informasi dari form penolakan
+        $permission->update([
+            'status' => 'rejected',
+            'supervisor_comment' => $request->supervisor_comment,
+            'supervisor_letter' => $request->supervisor_letter,
+        ]);
+
+        // Redirect kembali ke halaman sebelumnya dengan pesan sukses
+        return redirect()->back()->with('success', 'Permission rejected successfully.');
     }
 }

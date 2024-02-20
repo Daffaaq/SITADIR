@@ -114,9 +114,10 @@
                         })
                         .then(response => response.json())
                         .then(data => {
-                            if (data.warning) {
-                                alert(data.warning);
+                            if (data.error) {
+                                alert(data.error);
                             } else {
+                                alert(data.message);
                                 // Handle success, e.g., reload the DataTable
                                 $('#usersTable').DataTable().ajax.reload();
                                 location.reload();

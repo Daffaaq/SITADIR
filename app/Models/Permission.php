@@ -16,6 +16,8 @@ class Permission extends Model
         'start_date',
         'end_date',
         'status',
+        'supervisor_comment',
+        'supervisor_letter',
     ];
 
     // Relationship with User model
