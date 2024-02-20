@@ -14,4 +14,8 @@ class DashboardController extends Controller
     {
         return view('Karyawan.Dashboard.index');
     }
+    public function indexSupervisor()
+    {
+        return view('Supervisor.Dashboard.index');
+    }
 }

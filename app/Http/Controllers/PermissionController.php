@@ -16,7 +16,12 @@ class PermissionController extends Controller
 
     public function json()
     {
-        $users = Permission::select(['id', 'explanation', 'permission_type', 'start_date', 'end_date', 'status']);
+        $userId = auth()->id();
+
+        $users = Permission::where('user_id', $userId)
+            ->select(['id', 'explanation', 'permission_type', 'start_date', 'end_date', 'status'])
+            ->get();
+
         $index = 1;
         return DataTables::of($users)
             ->addColumn('DT_RowIndex', function ($data) use (&$index) {
@@ -184,59 +189,5 @@ class PermissionController extends Controller
         return response()->json(['message' => 'Permission deleted successfully.']);
     }
 
-    public function approve(Request $request, $id)
-    {
-        // Temukan permission berdasarkan ID
-        $permission = Permission::findOrFail($id);
-
-        // Periksa apakah pengguna yang melakukan approval adalah supervisor yang sesuai
-        // Misalnya, di sini kita menganggap supervisor memiliki role dengan nama 'supervisor'
-        if (!$request->user()->hasRole('supervisor')) {
-            return redirect()->back()->with('error', 'You are not authorized to approve permissions.');
-        }
-
-        // Lakukan validasi terhadap data yang diterima dari form approval
-        $request->validate([
-            'supervisor_comment' => 'nullable|string',
-            'supervisor_letter' => 'nullable|string',
-        ]);
-
-        // Update data permission dengan informasi dari form approval
-        $permission->update([
-            'status' => 'approved',
-            'supervisor_comment' => $request->supervisor_comment,
-            'supervisor_letter' => $request->supervisor_letter,
-        ]);
-
-        // Redirect kembali ke halaman sebelumnya dengan pesan sukses
-        return redirect()->back()->with('success', 'Permission approved successfully.');
-    }
-
-    public function reject(Request $request, $id)
-    {
-        // Temukan permission berdasarkan ID
-        $permission = Permission::findOrFail($id);
-
-        // Periksa apakah pengguna yang melakukan penolakan adalah supervisor yang sesuai
-        // Misalnya, di sini kita menganggap supervisor memiliki role dengan nama 'supervisor'
-        if (!$request->user()->hasRole('supervisor')) {
-            return redirect()->back()->with('error', 'You are not authorized to reject permissions.');
-        }
-
-        // Lakukan validasi terhadap data yang diterima dari form penolakan
-        $request->validate([
-            'supervisor_comment' => 'nullable|string',
-            'supervisor_letter' => 'nullable|string',
-        ]);
-
-        // Update data permission dengan informasi dari form penolakan
-        $permission->update([
-            'status' => 'rejected',
-            'supervisor_comment' => $request->supervisor_comment,
-            'supervisor_letter' => $request->supervisor_letter,
-        ]);
-
-        // Redirect kembali ke halaman sebelumnya dengan pesan sukses
-        return redirect()->back()->with('success', 'Permission rejected successfully.');
-    }
+    
 }

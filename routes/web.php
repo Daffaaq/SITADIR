@@ -7,6 +7,7 @@ use App\Http\Controllers\ManajemenUserController;
 use App\Http\Controllers\QrCodeController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PermissionController;
+use App\Http\Controllers\SupervisorPermissionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -62,6 +63,18 @@ Route::middleware(['auth', 'checkStatus:aktif', 'check.role:karyawan'])->group(f
     Route::prefix('/dashboardkaryawan')->group(function () {
         Route::get('/Profiles', [ProfileController::class, 'indexKaryawan']);
         Route::put('/Profiles/update/{id}', [ProfileController::class, 'updateKaryawan']);
+    });
+    // Rute lain untuk dashboard superadmin
+});
+Route::middleware(['auth', 'checkStatus:aktif', 'check.role:supervisor'])->group(function () {
+    Route::get('/dashboardsupervisor', [DashboardController::class, 'indexsupervisor']);
+    Route::prefix('/dashboardsupervisor')->group(function () {
+        Route::get('/Rekap_Permission', [SupervisorPermissionController::class, 'index']);
+        Route::get('/Rekap_Permission/data/{userId}', [SupervisorPermissionController::class, 'json'])->name('get.recap.Permission.supervisor');
+    });
+    Route::prefix('/dashboardsupervisor')->group(function () {
+        Route::get('/Profiles', [ProfileController::class, 'indexSupervisor']);
+        Route::put('/Profiles/update/{id}', [ProfileController::class, 'updateSupervisor']);
     });
     // Rute lain untuk dashboard superadmin
 });

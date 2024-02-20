@@ -36,8 +36,10 @@ class LoginController extends Controller
                 return redirect('dashboardkaryawan');
             } elseif ($user->role === 'superadmin') {
                 return redirect('dashboardSuperadmin');
-            } elseif ($user->role === 'kasubag umum') {
-                return redirect('dashboardKasubag');
+            } elseif ($user->role === 'supervisor') {
+                return redirect('dashboardsupervisor');
+            } elseif ($user->role === 'hrd') {
+                return redirect('dashboardhrd');
             } else {
                 return redirect()->route('login')->withErrors('Role pengguna tidak valid')->withInput();
             }
