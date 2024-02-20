@@ -1,4 +1,4 @@
-@extends('Superadmin.layouts.index')
+@extends('Karyawan.layouts.index')
 
 @section('container')
     <div class="container">
@@ -18,7 +18,7 @@
                                 {{ session('success') }}
                             </div>
                         @endif
-                        <form action="{{ url('/dashboardSuperadmin/Profiles/update/' . $user->id) }}" method="POST">
+                        <form action="{{ url('/dashboardkaryawan/Profiles/update/' . $user->id) }}" method="POST">
                             @csrf
                             @method('PUT')
                             <div class="row">
@@ -72,7 +72,7 @@
                             </div>
                             <div class="row mt-3">
                                 <div class="col-md-12" style="text-align: center;">
-                                    <a href="{{ url('/dashboardSuperadmin') }}" class="btn btn-secondary">Back</a>
+                                    <a href="{{ url('/dashboardkaryawan') }}" class="btn btn-secondary">Back</a>
                                     <button type="submit" class="btn btn-primary">Submit</button>
                                 </div>
                             </div>

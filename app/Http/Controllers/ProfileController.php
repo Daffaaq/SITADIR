@@ -51,4 +51,49 @@ class ProfileController extends Controller
         // Redirect ke halaman profil dengan pesan sukses
         return redirect('/dashboardSuperadmin/Profiles')->with('success', 'Profile updated successfully.');
     }
+
+    public function indexKaryawan()
+    {
+        $user = Auth::user();
+        if ($user) {
+            // Lakukan sesuatu dengan $user
+            // dd($user);
+
+            // Kemudian, gunakan $user dalam tampilan atau logika lainnya
+            return view('Karyawan.Profiles.index', compact('user'));
+        }
+        return back();
+    }
+
+    public function updateKaryawan(Request $request)
+    {
+        // Validasi data
+        $request->validate([
+            'name' => 'required',
+            'email' => 'required|email|unique:users,email,' . Auth::id(),
+            'password' => 'nullable|min:8',
+        ]);
+
+        // Dapatkan data pengguna yang sedang login
+        $user = Auth::user();
+
+        // Update profil pengguna
+        $user->update([
+            'name' => $request->name,
+            'email' => $request->email,
+            // Jika password yang dimasukkan tidak kosong, enkripsi password baru
+            'password' => $request->filled('password') ? bcrypt($request->password) : $user->password,
+            'role' => 'karyawan',
+            'status' => 'aktif',
+        ]);
+
+        // Jika pengguna mencoba mengubah role atau status secara paksa, kembalikan pesan error
+        if ($request->role != 'karyawan' || $request->status != 'aktif') {
+            return redirect('/dashboardkaryawan/Profiles')->with('info', 'Role and status cannot be changed, but profile updated successfully.');
+        }
+
+
+        // Redirect ke halaman profil dengan pesan sukses
+        return redirect('/dashboardkaryawan/Profiles')->with('success', 'Profile updated successfully.');
+    }
 }

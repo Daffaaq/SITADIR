@@ -59,6 +59,10 @@ Route::middleware(['auth', 'checkStatus:aktif', 'check.role:karyawan'])->group(f
         Route::delete('/Permission/destroy/{id}', [PermissionController::class, 'destroy']);
         Route::get('/Permission/data', [PermissionController::class, 'json']);
     });
+    Route::prefix('/dashboardkaryawan')->group(function () {
+        Route::get('/Profiles', [ProfileController::class, 'indexKaryawan']);
+        Route::put('/Profiles/update/{id}', [ProfileController::class, 'updateKaryawan']);
+    });
     // Rute lain untuk dashboard superadmin
 });
 // Route::middleware(['auth', 'checkStatus:nonaktif', 'check.role:superadmin'])->group(function () {
