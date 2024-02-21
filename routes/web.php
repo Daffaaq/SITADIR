@@ -55,6 +55,7 @@ Route::middleware(['auth', 'checkStatus:aktif', 'check.role:karyawan'])->group(f
         Route::get('/Permission', [PermissionController::class, 'index']);
         Route::get('/Permission/create', [PermissionController::class, 'create']);
         Route::post('/Permission/store', [PermissionController::class, 'store']);
+        Route::get('/Permission/show/{id}', [PermissionController::class, 'show']);
         Route::get('/Permission/edit/{id}', [PermissionController::class, 'edit']);
         Route::put('/Permission/update/{id}', [PermissionController::class, 'update']);
         Route::delete('/Permission/destroy/{id}', [PermissionController::class, 'destroy']);
@@ -70,6 +71,11 @@ Route::middleware(['auth', 'checkStatus:aktif', 'check.role:supervisor'])->group
     Route::get('/dashboardsupervisor', [DashboardController::class, 'indexsupervisor']);
     Route::prefix('/dashboardsupervisor')->group(function () {
         Route::get('/Rekap_Permission', [SupervisorPermissionController::class, 'index']);
+        Route::get('/Rekap_Permission/show/{id}', [SupervisorPermissionController::class, 'show']);
+        Route::get('/Rekap_Permission/accepted/{id}', [SupervisorPermissionController::class, 'approveindex']);
+        Route::get('/Rekap_Permission/rejected/{id}', [SupervisorPermissionController::class, 'rejectindex']);
+        Route::put('/Rekap_Permission/accepted/update/{id}', [SupervisorPermissionController::class, 'approve']);
+        Route::put('/Rekap_Permission/rejected/update/{id}', [SupervisorPermissionController::class, 'reject']);
         Route::get('/Rekap_Permission/data/{userId}', [SupervisorPermissionController::class, 'json'])->name('get.recap.Permission.supervisor');
     });
     Route::prefix('/dashboardsupervisor')->group(function () {

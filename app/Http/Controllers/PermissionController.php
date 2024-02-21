@@ -45,9 +45,11 @@ class PermissionController extends Controller
             ->addColumn('action', function ($row) {
                 $editUrl = url('/dashboardkaryawan/Permission/edit/' . $row->id);
                 $deleteUrl = url('/dashboardkaryawan/Permission/destroy/' . $row->id);
+                $showUrl = url('/dashboardkaryawan/Permission/show/' . $row->id); // Tautan untuk menampilkan detail izin
 
-                return '<a href="' . $editUrl . '">Edit</a> | <a href="#" class="delete-users" data-url="' . $deleteUrl . '">Delete</a>';
+                return '<a href="' . $editUrl . '">Edit</a> | <a href="' . $showUrl . '">Show</a> | <a href="#" class="delete-users" data-url="' . $deleteUrl . '">Delete</a>';
             })
+
             ->toJson();
     }
 
@@ -116,8 +118,23 @@ class PermissionController extends Controller
      */
     public function show(string $id)
     {
-        //
+        // Temukan permission berdasarkan ID
+        $permission = Permission::find($id);
+
+        // Periksa apakah permission ditemukan
+        if (!$permission) {
+            return redirect('/dashboardkaryawan/Permission')->with('error', 'Permission not found.');
+        }
+
+        // Periksa apakah pengguna yang mengakses memiliki akses untuk melihat permission
+        if ($permission->user_id !== Auth::id()) {
+            return redirect('/dashboardkaryawan/Permission')->with('error', 'You are not authorized to view this permission.');
+        }
+        $period = \Carbon\Carbon::parse($permission->start_date)->diffInDays(\Carbon\Carbon::parse($permission->end_date));
+        // Kembalikan view dengan data permission
+        return view('Karyawan.Permission.show', compact('permission', 'period'));
     }
+
 
     /**
      * Show the form for editing the specified resource.
@@ -125,6 +142,9 @@ class PermissionController extends Controller
     public function edit(string $id)
     {
         $permission = Permission::find($id);
+        if ($permission->status === 'approved' || $permission->status === 'rejected') {
+            return redirect('/dashboardkaryawan/Permission')->with('error', 'Permission with status approved or rejected cannot be Updated.');
+        }
         return view('Karyawan.Permission.edit', compact('permission'));
     }
 
@@ -188,6 +208,4 @@ class PermissionController extends Controller
 
         return response()->json(['message' => 'Permission deleted successfully.']);
     }
-
-    
 }

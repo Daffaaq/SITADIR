@@ -20,7 +20,7 @@ return new class extends Migration
             $table->date('end_date');
             $table->enum('status', ['pending', 'approved', 'rejected'])->default('pending');
             $table->text('supervisor_comment')->nullable();
-            $table->text('supervisor_letter')->nullable();
+            $table->string('supervisor_letter')->nullable();
             $table->timestamps();
 
             // Define foreign key constraint
