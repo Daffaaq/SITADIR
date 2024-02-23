@@ -130,10 +130,32 @@ class PermissionController extends Controller
         if ($permission->user_id !== Auth::id()) {
             return redirect('/dashboardkaryawan/Permission')->with('error', 'You are not authorized to view this permission.');
         }
-        $period = \Carbon\Carbon::parse($permission->start_date)->diffInDays(\Carbon\Carbon::parse($permission->end_date));
-        // Kembalikan view dengan data permission
-        return view('Karyawan.Permission.show', compact('permission', 'period'));
+
+        // Return the view with permission data and calculated period
+        return view('Karyawan.Permission.show', [
+            'permission' => $permission,
+            'period' => $this->calculatePeriod($permission->start_date, $permission->end_date),
+        ]);
     }
+
+    private function calculatePeriod($startDate, $endDate)
+    {
+        $start = Carbon::parse($startDate);
+        $end = Carbon::parse($endDate);
+        $period = 0;
+
+        // Iterasi melalui setiap hari dalam rentang tanggal
+        for ($date = $start; $date->lte($end); $date->addDay()) {
+            // Periksa apakah hari saat ini adalah hari libur (Sabtu atau Minggu)
+            if (!$date->isWeekend()) {
+                $period++;
+            }
+        }
+
+        // Return the calculated period
+        return $period;
+    }
+
 
 
     /**

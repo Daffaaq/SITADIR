@@ -152,8 +152,28 @@ class SupervisorPermissionController extends Controller
             return redirect('/dashboardkaryawan/Permission')->with('error', 'Permission not found.');
         }
 
-        $period = \Carbon\Carbon::parse($permission->start_date)->diffInDays(\Carbon\Carbon::parse($permission->end_date));
-        // Kembalikan view dengan data permission
+        // Hitung periode
+        $period = $this->calculatePeriod($permission->start_date, $permission->end_date);
+
+        // Kembalikan view dengan data permission dan periode
         return view('Supervisor.Permission.show', compact('permission', 'period'));
+    }
+
+    private function calculatePeriod($startDate, $endDate)
+    {
+        $start = Carbon::parse($startDate);
+        $end = Carbon::parse($endDate);
+        $period = 0;
+
+        // Iterasi melalui setiap hari dalam rentang tanggal
+        for ($date = $start; $date->lte($end); $date->addDay()) {
+            // Periksa apakah hari saat ini adalah hari libur (Sabtu atau Minggu)
+            if (!$date->isWeekend()) {
+                $period++;
+            }
+        }
+
+        // Return the calculated period
+        return $period;
     }
 }
