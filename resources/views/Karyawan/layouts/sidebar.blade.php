@@ -59,12 +59,12 @@
                 <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Custom Absensi:</h6>
-                        <a class="collapse-item {{ request()->is('superadmin/categoryArticle') ? 'active' : '' }}"
-                            href="{{ url('/superadmin/categoryArticle') }}">Manual Absensi</a>
-                        <a class="collapse-item {{ request()->is('superadmin/categoryGalery') ? 'active' : '' }}"
-                            href="{{ url('/superadmin/categoryGalery') }}">Live Location Absensi</a>
-                        <a class="collapse-item {{ request()->is('superadmin/categoryAspiration') ? 'active' : '' }}"
-                            href="{{ url('/superadmin/categoryAspiration') }}">Qr Code Absensi</a>
+                        <a class="collapse-item {{ request()->is('dashboardkaryawan/Absensi/Manual') ? 'active' : '' }}"
+                            href="{{ url('/dashboardkaryawan/Absensi/Manual') }}">Manual Absensi</a>
+                        <a class="collapse-item {{ request()->is('dashboardkaryawan/categoryGalery') ? 'active' : '' }}"
+                            href="{{ url('/dashboardkaryawan/categoryGalery') }}">Live Location Absensi</a>
+                        <a class="collapse-item {{ request()->is('dashboardkaryawan/categoryAspiration') ? 'active' : '' }}"
+                            href="{{ url('/dashboardkaryawan/categoryAspiration') }}">Qr Code Absensi</a>
                     </div>
                 </div>
             </li>

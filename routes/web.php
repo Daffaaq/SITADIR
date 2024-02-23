@@ -8,6 +8,7 @@ use App\Http\Controllers\QrCodeController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\SupervisorPermissionController;
+use App\Http\Controllers\AbsensiManualController;
 
 /*
 |--------------------------------------------------------------------------
@@ -64,6 +65,13 @@ Route::middleware(['auth', 'checkStatus:aktif', 'check.role:karyawan'])->group(f
     Route::prefix('/dashboardkaryawan')->group(function () {
         Route::get('/Profiles', [ProfileController::class, 'indexKaryawan']);
         Route::put('/Profiles/update/{id}', [ProfileController::class, 'updateKaryawan']);
+    });
+    Route::prefix('/dashboardkaryawan')->group(function () {
+        Route::get('/Absensi/Manual', [AbsensiManualController::class, 'index']);
+        Route::get('/Absensi/Manual/Create', [AbsensiManualController::class, 'create']);
+        Route::post('/Absensi/Manual/Store', [AbsensiManualController::class, 'storeDatang']);
+        Route::put('/Absensi/Manual/Pulang/{id}', [AbsensiManualController::class, 'storePulang']);
+        Route::get('/Absensi/Manual/data', [AbsensiManualController::class, 'json']);
     });
     // Rute lain untuk dashboard superadmin
 });
