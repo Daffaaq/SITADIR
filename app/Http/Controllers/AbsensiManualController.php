@@ -42,11 +42,6 @@ class AbsensiManualController extends Controller
         return view('Karyawan.Absensi.Manual.index', ['absensi' => $absensi]);
     }
 
-    public function create()
-    {
-        return view('Karyawan.Absensi.Manual.create');
-    }
-
     public function storeDatang()
     {
         // Dapatkan ID pengguna yang sedang login

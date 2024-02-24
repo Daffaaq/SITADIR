@@ -61,8 +61,8 @@
                         <h6 class="collapse-header">Custom Absensi:</h6>
                         <a class="collapse-item {{ request()->is('dashboardkaryawan/Absensi/Manual') ? 'active' : '' }}"
                             href="{{ url('/dashboardkaryawan/Absensi/Manual') }}">Manual Absensi</a>
-                        <a class="collapse-item {{ request()->is('dashboardkaryawan/categoryGalery') ? 'active' : '' }}"
-                            href="{{ url('/dashboardkaryawan/categoryGalery') }}">Live Location Absensi</a>
+                        <a class="collapse-item {{ request()->is('dashboardkaryawan/Absensi/LiveLocation') ? 'active' : '' }}"
+                            href="{{ url('/dashboardkaryawan/Absensi/LiveLocation') }}">Live Location Absensi</a>
                         <a class="collapse-item {{ request()->is('dashboardkaryawan/categoryAspiration') ? 'active' : '' }}"
                             href="{{ url('/dashboardkaryawan/categoryAspiration') }}">Qr Code Absensi</a>
                     </div>
