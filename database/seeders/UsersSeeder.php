@@ -72,6 +72,17 @@ class UsersSeeder extends Seeder
                 'updated_at' => now(),
             ],
             [
+                'name' => 'Karyawan2',
+                'email' => 'karyawan2@gmail.com',
+                'role' => 'karyawan',
+                'status' => 'aktif',
+                'email_verified_at' => now(),
+                'password' => Hash::make('password'),
+                'remember_token' => Str::random(10),
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
                 'name' => 'HRD',
                 'email' => 'hrd@gmail.com',
                 'role' => 'hrd',

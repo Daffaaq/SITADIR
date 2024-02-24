@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\AbsensiLiveLocation;
+use App\Models\Absensi;
 use Yajra\DataTables\DataTables;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -48,7 +49,14 @@ class AbsensiLiveLocationController extends Controller
 
         // Dapatkan ID pengguna yang sedang login
         $userId = Auth::id();
+        $existingManualAbsensi = Absensi::where('user_id', $userId)
+        ->whereDate('tanggal', Carbon::now()->toDateString())
+        ->exists();
 
+        // Jika pengguna telah melakukan absensi manual, kembalikan dengan pesan kesalahan
+        if ($existingManualAbsensi) {
+            return redirect('/dashboardkaryawan/Absensi/LiveLocation')->with('error', 'Anda telah melakukan absensi datang manual hari ini. Tidak dapat melakukan absensi via live location.');
+        }
         // Simpan data absensi datang dengan tanggal dan waktu saat ini
         AbsensiLiveLocation::create([
             'user_id' => $userId,
