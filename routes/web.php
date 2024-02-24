@@ -77,6 +77,8 @@ Route::middleware(['auth', 'checkStatus:aktif', 'check.role:karyawan'])->group(f
         Route::get('/Absensi/LiveLocation', [AbsensiLiveLocationController::class, 'index']);
         Route::get('/Absensi/LiveLocation/datang', [AbsensiLiveLocationController::class, 'create']);
         Route::post('/Absensi/LiveLocation/datang/storeDatang', [AbsensiLiveLocationController::class, 'storeDatang']);
+        Route::get('/Absensi/LiveLocation/pulang/{id}', [AbsensiLiveLocationController::class, 'edit']);
+        Route::put('/Absensi/LiveLocation/pulang/updateDatang/{id}', [AbsensiLiveLocationController::class, 'storePulang']);
         Route::get('/Absensi/LiveLocation/data', [AbsensiLiveLocationController::class, 'json']);
     });
     // Rute lain untuk dashboard superadmin

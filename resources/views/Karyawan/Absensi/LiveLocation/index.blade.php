@@ -75,8 +75,8 @@
                         name: 'waktu_datang_LiveLoc'
                     },
                     {
-                        data: 'waktu_pulang',
-                        name: 'waktu_pulang',
+                        data: 'waktu_pulang_LiveLoc',
+                        name: 'waktu_pulang_LiveLoc',
                         render: function(data) {
                             return data ? data :
                                 'belum absensi'; // Jika data tidak null, gunakan nilainya. Jika null, gunakan "belum absensi".
@@ -86,13 +86,7 @@
                         data: 'action',
                         name: 'action',
                         orderable: false,
-                        searchable: false,
-                        render: function(data, type, row) {
-                            return '<a href="javascript:void(0)" class="pulang-btn" data-id="' + row
-                                .absensi_id +
-                                '">Absensi Pulang</a>';
-                        }
-
+                        searchable: false
                     },
                 ]
             });

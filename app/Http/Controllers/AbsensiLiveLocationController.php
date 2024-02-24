@@ -20,8 +20,10 @@ class AbsensiLiveLocationController extends Controller
             ->addColumn('DT_RowIndex', function ($data) use (&$index) {
                 return $index++; // Increment the index for each row
             })
-            ->addColumn('absensi_id', function ($data) {
-                return $data->id; // Use 'id' column as 'absensi_id'
+            ->addColumn('action', function ($row) {
+                $editUrl = url('/dashboardkaryawan/Absensi/LiveLocation/pulang/' . $row->id);
+
+                return '<a href="' . $editUrl . '">Pulang</a>';
             })
             ->toJson();
     }
@@ -57,6 +59,38 @@ class AbsensiLiveLocationController extends Controller
             'letter_of_assignment' => $request->file('letter_of_assignment')->store('letters_of_assignment', 'public'),
         ]);
         return redirect('/dashboardkaryawan/Absensi/LiveLocation')
-            ->with('success', 'Attendence live location successfully.');
+            ->with('success', 'Terima kasih telah absen saat kedatangan! Data absensimu via live location sudah disimpan.');
+    }
+
+    public function edit(string $id)
+    {
+        $absensi = AbsensiLiveLocation::find($id);
+        return view('Karyawan.Absensi.LiveLocation.pulang', compact('absensi'));
+    }
+    public function storePulang(Request $request, $id)
+    {
+        $absensi = AbsensiLiveLocation::findOrFail($id);
+
+        $request->validate([
+            'longitude_pulang' => 'required',
+            'latitude_pulang' => 'required',
+        ]);
+        $tanggalAbsensiDatang = Carbon::parse($absensi->tanggal);
+        $tanggalAbsensiPulang = Carbon::now(); // Misalkan ini adalah waktu absensi pulang, ganti dengan waktu yang sesuai dengan aplikasi Anda
+
+        if ($tanggalAbsensiPulang->toDateString() != $tanggalAbsensiDatang->toDateString()) {
+            // Jika tanggal absensi pulang tidak sama dengan tanggal absensi datang,
+            // beri respon dengan pesan error
+            return response()->json(['error' => 'Maaf, Anda tidak dapat submit absensi pulang setelah atau pada tanggal absensi datang.'], 422);
+        }
+        // Perbarui waktu pulang dengan waktu saat ini
+        $absensi->update([
+            'waktu_pulang_LiveLoc' => Carbon::now()->toTimeString(),
+            'longitude_pulang' => $request->longitude_pulang,
+            'latitude_pulang' => $request->latitude_pulang,
+        ]);
+
+        return redirect('/dashboardkaryawan/Absensi/LiveLocation')
+            ->with('success', 'Terima kasih telah absen saat Kepulangan! Data absensimu via live location sudah disimpan.');
     }
 }

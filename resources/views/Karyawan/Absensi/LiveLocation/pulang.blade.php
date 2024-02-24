@@ -18,34 +18,30 @@
                             </div>
                         @endif
 
-                        <form method="POST" action="{{ url('/dashboardkaryawan/Absensi/LiveLocation/datang/storeDatang') }}"
+                        <form method="POST"
+                            action="{{ url('/dashboardkaryawan/Absensi/LiveLocation/pulang/updateDatang/' . $absensi->id) }}"
                             enctype="multipart/form-data">
                             @csrf
+                            @method('PUT')
                             <!-- Peta -->
                             <div id="map" style="height: 300px;"></div>
 
                             <!-- Longitude dan Latitude -->
                             <div class="form-group">
-                                <label for="longitude_datang">Longitude:</label>
-                                <input type="text" id="longitude_datang" name="longitude_datang" class="form-control">
+                                <label for="longitude_pulang">Longitude:</label>
+                                <input type="text" id="longitude_pulang" name="longitude_pulang" class="form-control">
                             </div>
                             <div class="form-group">
-                                <label for="latitude_datang">Latitude:</label>
-                                <input type="text" id="latitude_datang" name="latitude_datang" class="form-control">
-                            </div>
-
-                            <!-- File Surat Tugas -->
-                            <div class="form-group">
-                                <label for="letter_of_assignment">Letter of Assignment:</label>
-                                <input type="file" class="form-control" id="letter_of_assignment"
-                                    name="letter_of_assignment" required>
+                                <label for="latitude_pulang">Latitude:</label>
+                                <input type="text" id="latitude_pulang" name="latitude_pulang" class="form-control">
                             </div>
 
                             <!-- Submit Button -->
                             <div class="row mt-3">
                                 <div class="col-md-12">
-                                    <a href="{{ url('/dashboardkaryawan/Absensi/LiveLocation') }}" class="btn btn-secondary">Back</a>
-                                    <button type="submit" class="btn btn-primary">Datang</button>
+                                    <a href="{{ url('/dashboardkaryawan/Absensi/LiveLocation') }}"
+                                        class="btn btn-secondary">Back</a>
+                                    <button type="submit" class="btn btn-primary">Pulang</button>
                                     <button type="button" class="btn btn-info" onclick="refreshMap()">Refresh Map</button>
                                 </div>
                             </div>
@@ -73,8 +69,8 @@
                 map.removeLayer(marker);
             }
             marker = new L.Marker(e.latlng).addTo(map);
-            document.getElementById('longitude_datang').value = e.latlng.lng;
-            document.getElementById('latitude_datang').value = e.latlng.lat;
+            document.getElementById('longitude_pulang').value = e.latlng.lng;
+            document.getElementById('latitude_pulang').value = e.latlng.lat;
         });
 
         // Mengambil lokasi pengguna saat ini dan menampilkan pada peta
@@ -89,8 +85,8 @@
                         map.removeLayer(marker);
                     }
                     marker = new L.Marker([lat, lng]).addTo(map);
-                    document.getElementById('longitude_datang').value = lng;
-                    document.getElementById('latitude_datang').value = lat;
+                    document.getElementById('longitude_pulang').value = lng;
+                    document.getElementById('latitude_pulang').value = lat;
                 });
             } else {
                 alert("Geolocation is not supported by this browser.");
