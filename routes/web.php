@@ -10,6 +10,8 @@ use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\SupervisorPermissionController;
 use App\Http\Controllers\AbsensiManualController;
 use App\Http\Controllers\AbsensiLiveLocationController;
+use App\Http\Controllers\AbsensiSuperadminController;
+use App\Http\Controllers\LaporanAbsensiController;
 
 /*
 |--------------------------------------------------------------------------
@@ -49,6 +51,10 @@ Route::middleware(['auth', 'checkStatus:aktif', 'check.role:superadmin'])->group
         Route::get('/Profiles', [ProfileController::class, 'index']);
         Route::put('/Profiles/update/{id}', [ProfileController::class, 'updateSuperadmin']);
     });
+    Route::prefix('/dashboardSuperadmin')->group(function () {
+        Route::get('/absensi', [AbsensiSuperadminController::class, 'index']);
+        Route::get('/absensi/data/{userId}', [AbsensiSuperadminController::class, 'json'])->name('get.recap.Attendence.Superadmin');
+    });
     // Rute lain untuk dashboard superadmin
 });
 Route::middleware(['auth', 'checkStatus:aktif', 'check.role:karyawan'])->group(function () {
@@ -80,6 +86,10 @@ Route::middleware(['auth', 'checkStatus:aktif', 'check.role:karyawan'])->group(f
         Route::get('/Absensi/LiveLocation/pulang/{id}', [AbsensiLiveLocationController::class, 'edit']);
         Route::put('/Absensi/LiveLocation/pulang/updateDatang/{id}', [AbsensiLiveLocationController::class, 'storePulang']);
         Route::get('/Absensi/LiveLocation/data', [AbsensiLiveLocationController::class, 'json']);
+    });
+    Route::prefix('/dashboardkaryawan')->group(function () {
+        Route::get('/Laporan/Absensi', [LaporanAbsensiController::class, 'index']);
+        Route::get('/Laporan/Absensi/data', [LaporanAbsensiController::class, 'json']);
     });
     // Rute lain untuk dashboard superadmin
 });

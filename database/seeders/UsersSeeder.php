@@ -50,8 +50,8 @@ class UsersSeeder extends Seeder
                 'updated_at' => now(),
             ],
             [
-                'name' => 'Karyawan',
-                'email' => 'karyawan@gmail.com',
+                'name' => 'Agung Dito Cahya',
+                'email' => 'agung@gmail.com',
                 'role' => 'karyawan',
                 'status' => 'aktif',
                 'email_verified_at' => now(),
@@ -61,8 +61,8 @@ class UsersSeeder extends Seeder
                 'updated_at' => now(),
             ],
             [
-                'name' => 'Karyawan1',
-                'email' => 'karyawan1@gmail.com',
+                'name' => 'Cheline Marsyanda',
+                'email' => 'cheline@gmail.com',
                 'role' => 'karyawan',
                 'status' => 'aktif',
                 'email_verified_at' => now(),
@@ -72,8 +72,8 @@ class UsersSeeder extends Seeder
                 'updated_at' => now(),
             ],
             [
-                'name' => 'Karyawan2',
-                'email' => 'karyawan2@gmail.com',
+                'name' => 'Kartika Hapsari',
+                'email' => 'kartihap@gmail.com',
                 'role' => 'karyawan',
                 'status' => 'aktif',
                 'email_verified_at' => now(),

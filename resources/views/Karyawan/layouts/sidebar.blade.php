@@ -69,8 +69,8 @@
                 </div>
             </li>
 
-            <li class="nav-item @active('superadmin/Article')">
-                <a class="nav-link" href="{{ url('/superadmin/Article') }}">
+            <li class="nav-item @active('dashboardkaryawan/Laporan/Absensi')">
+                <a class="nav-link" href="{{ url('/dashboardkaryawan/Laporan/Absensi') }}">
                     <i class="fas fa-fw fa-newspaper"></i>
                     <span>Laporan Absensi</span>
                 </a>
