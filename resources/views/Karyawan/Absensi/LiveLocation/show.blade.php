@@ -18,8 +18,8 @@
                                 <p><strong>Latitude Datang:</strong> {{ $absensi->latitude_datang }}</p>
                                 <div id="map-datang" style="height: 200px;"></div>
                                 <p><strong>---------------------------------------------------</strong></p>
-                                <p><strong>Longitude Datang:</strong> {{ $absensi->longitude_datang_real }}</p>
-                                <p><strong>Latitude Datang:</strong> {{ $absensi->latitude_datang_real }}</p>
+                                <p><strong>Longitude Datang By Sistem:</strong> {{ $absensi->longitude_datang_real }}</p>
+                                <p><strong>Latitude Datang By Sistem:</strong> {{ $absensi->latitude_datang_real }}</p>
                                 <div id="map-datang-real" style="height: 200px;"></div>
                             </div>
                             <div class="col-md-6">
@@ -33,9 +33,9 @@
                                     <div id="map-pulang" style="height: 200px;"></div>
                                 @endif
                                 <p><strong>---------------------------------------------------</strong></p>
-                                <p><strong>Longitude Pulang:</strong>
+                                <p><strong>Longitude Pulang By Sistem:</strong>
                                     {{ $absensi->longitude_pulang_real ?? 'Belum Absen Pulang' }}</p>
-                                <p><strong>Latitude Pulang:</strong>
+                                <p><strong>Latitude Pulang By Sistem:</strong>
                                     {{ $absensi->latitude_pulang_real ?? 'Belum Absen Pulang' }}
                                 </p>
                                 @if ($absensi->latitude_pulang_real && $absensi->longitude_pulang_real)
