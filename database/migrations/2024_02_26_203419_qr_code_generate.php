@@ -11,17 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('absensi_qr_codes', function (Blueprint $table) {
+        Schema::create('qr_code_gens', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users');
-            $table->date('tanggal');
-            $table->time('waktu_datang')->nullable();
-            $table->time('waktu_pulang')->nullable();
-            $table->time('waktu_datang_Qr_code')->nullable();
-            $table->time('waktu_pulang_Qr_code')->nullable();
-            $table->string('qr_code_path_datang')->nullable();
-            $table->string('qr_code_path_pulang')->nullable();
+            $table->string('code_datang')->unique();
+            $table->string('qr_code_datang')->nullable();
+            $table->string('code_pulang')->unique()->nullable();
+            $table->string('qr_code_pulang')->nullable();
             $table->timestamps();
         });
     }

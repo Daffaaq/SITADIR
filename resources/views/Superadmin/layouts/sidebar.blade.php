@@ -77,6 +77,12 @@
                     <span>Laporan Absensi</span>
                 </a>
             </li>
+            <li class="nav-item @active('dashboardSuperadmin/send-qr-code-to-karyawan')">
+                <a class="nav-link" href="{{ url('/dashboardSuperadmin/send-qr-code-to-karyawan') }}">
+                    <i class="fas fa-fw fa-newspaper"></i>
+                    <span>Qr Code</span>
+                </a>
+            </li>
             {{-- <li class="nav-item @active('superadmin/Galery')">
                 <a class="nav-link" href="{{ url('/superadmin/Galery') }}">
                     <i class="fas fa-fw fa-camera"></i>

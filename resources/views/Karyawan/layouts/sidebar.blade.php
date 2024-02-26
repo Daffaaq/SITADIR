@@ -63,8 +63,8 @@
                             href="{{ url('/dashboardkaryawan/Absensi/Manual') }}">Manual Absensi</a>
                         <a class="collapse-item {{ request()->is('dashboardkaryawan/Absensi/LiveLocation') ? 'active' : '' }}"
                             href="{{ url('/dashboardkaryawan/Absensi/LiveLocation') }}">Live Location Absensi</a>
-                        <a class="collapse-item {{ request()->is('dashboardkaryawan/categoryAspiration') ? 'active' : '' }}"
-                            href="{{ url('/dashboardkaryawan/categoryAspiration') }}">Qr Code Absensi</a>
+                        <a class="collapse-item {{ request()->is('dashboardkaryawan/Absensi/QrCode') ? 'active' : '' }}"
+                            href="{{ url('/dashboardkaryawan/Absensi/QrCode') }}">Qr Code Absensi</a>
                     </div>
                 </div>
             </li>
@@ -79,6 +79,12 @@
                 <a class="nav-link" href="{{ url('/dashboardkaryawan/Permission') }}">
                     <i class="fas fa-fw fa-newspaper"></i>
                     <span>Pengajuan</span>
+                </a>
+            </li>
+            <li class="nav-item @active('dashboardkaryawan/Qr-Code')">
+                <a class="nav-link" href="{{ url('/dashboardkaryawan/Qr-Code') }}">
+                    <i class="fas fa-fw fa-newspaper"></i>
+                    <span>Qr Code</span>
                 </a>
             </li>
             {{-- <li class="nav-item @active('superadmin/Galery')">

@@ -10,8 +10,10 @@ use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\SupervisorPermissionController;
 use App\Http\Controllers\AbsensiManualController;
 use App\Http\Controllers\AbsensiLiveLocationController;
+use App\Http\Controllers\AbsensiQRCodeController;
 use App\Http\Controllers\AbsensiSuperadminController;
 use App\Http\Controllers\LaporanAbsensiController;
+use App\Http\Controllers\SendQrCodeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -55,6 +57,12 @@ Route::middleware(['auth', 'checkStatus:aktif', 'check.role:superadmin'])->group
         Route::get('/absensi', [AbsensiSuperadminController::class, 'index']);
         Route::get('/absensi/data/{userId}', [AbsensiSuperadminController::class, 'json'])->name('get.recap.Attendence.Superadmin');
     });
+    Route::prefix('/dashboardSuperadmin')->group(function () {
+        Route::get('/send-qr-code-to-karyawan', [SendQrCodeController::class, 'index']);
+        Route::post('/send-qr-code-to-karyawan/send/datang/{id}', [SendQrCodeController::class, 'sendQrCodeToUserDatang']);
+        Route::post('/send-qr-code-to-karyawan/send/pulang/{id}', [SendQrCodeController::class, 'sendQrCodeToUserPulang']);
+        Route::get('/send-qr-code-to-karyawan/data', [SendQrCodeController::class, 'json']);
+    });
     // Rute lain untuk dashboard superadmin
 });
 Route::middleware(['auth', 'checkStatus:aktif', 'check.role:karyawan'])->group(function () {
@@ -74,10 +82,22 @@ Route::middleware(['auth', 'checkStatus:aktif', 'check.role:karyawan'])->group(f
         Route::put('/Profiles/update/{id}', [ProfileController::class, 'updateKaryawan']);
     });
     Route::prefix('/dashboardkaryawan')->group(function () {
+        Route::get('/Qr-Code', [SendQrCodeController::class, 'indexKaryawan']);
+        Route::post('/Qr-Code/scan', [SendQrCodeController::class, 'scanQrCodeDatang']);
+    });
+    Route::prefix('/dashboardkaryawan')->group(function () {
         Route::get('/Absensi/Manual', [AbsensiManualController::class, 'index']);
         Route::post('/Absensi/Manual/Store', [AbsensiManualController::class, 'storeDatang']);
         Route::put('/Absensi/Manual/Pulang/{id}', [AbsensiManualController::class, 'storePulang']);
         Route::get('/Absensi/Manual/data', [AbsensiManualController::class, 'json']);
+    });
+    Route::prefix('/dashboardkaryawan')->group(function () {
+        Route::get('/Absensi/QrCode', [AbsensiQRCodeController::class, 'index']);
+        Route::post('/Absensi/QrCode/scan/Store', [AbsensiQRCodeController::class, 'scanQrCodeDatang']);
+        Route::post('/Absensi/QrCode/upload/Store', [AbsensiQRCodeController::class, 'uploadQrCodeDatang']);
+        Route::put('/Absensi/QrCode/scan/Pulang/{id}', [AbsensiQRCodeController::class, 'scanQrCodePulang']);
+        Route::put('/Absensi/QrCode/upload/Pulang/{id}', [AbsensiQRCodeController::class, 'uploadQrCodePulang']);
+        Route::get('/Absensi/QrCode/data', [AbsensiQRCodeController::class, 'json']);
     });
     Route::prefix('/dashboardkaryawan')->group(function () {
         Route::get('/Absensi/LiveLocation', [AbsensiLiveLocationController::class, 'index']);
