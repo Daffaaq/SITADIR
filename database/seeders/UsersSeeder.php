@@ -52,21 +52,7 @@ class UsersSeeder extends Seeder
             ['name' => 'Amelia Green', 'email' => 'amelia.green@gmail.com'],
             ['name' => 'Jashon Robert', 'email' => 'Jashon.Robert@gmail.com'],
         ];
-
-        // Looping untuk menambahkan pengguna
-        // foreach ($usersData as $userData) {
-        //     DB::table('users')->insert([
-        //         'name' => $userData['name'],
-        //         'email' => $userData['email'],
-        //         'role' => 'karyawan',
-        //         'status' => 'aktif',
-        //         'email_verified_at' => now(),
-        //         'password' => Hash::make('password'),
-        //         'remember_token' => Str::random(10),
-        //         'created_at' => now(),
-        //         'updated_at' => now(),
-        //     ]);
-        // }
+        
         $usersData = array_map(function ($userData) {
             return [
                 'name' => $userData['name'],
