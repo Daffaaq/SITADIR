@@ -98,6 +98,19 @@
             </div>
         </div>
     </div>
+    <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="pulangModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="errorModalLabel">Absensi Pulang</h5>
+                </div>
+                <div class="modal-body">
+                    <p>Mohon Maaf anda Absensi pulang 2 kali</p>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script>
         $(document).ready(function() {
@@ -184,7 +197,16 @@
                             window.location.reload();
                         },
                         error: function(error) {
-                            alert('Error: ' + error.responseJSON.error);
+                            $('#pulangModal').modal('hide');
+                            $('#errorModal').modal('show');
+                            setTimeout(function() {
+                                $('#errorModal').modal('hide');
+                                window.location.reload();
+                            }, 2500); // Menunggu 5 detik sebelum melakukan reload
+                            // Reload the table after updating the data
+                            // $('#usersTable').DataTable().ajax.reload();
+                            // window.location.reload();
+                            // alert('Error: ' + error.responseJSON.error);
                         }
                     });
                 } else {

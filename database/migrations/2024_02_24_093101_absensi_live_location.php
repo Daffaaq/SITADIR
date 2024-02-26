@@ -16,8 +16,6 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users');
             $table->date('tanggal');
-            $table->time('waktu_datang')->nullable();
-            $table->time('waktu_pulang')->nullable();
             $table->time('waktu_datang_LiveLoc')->nullable();
             $table->time('waktu_pulang_LiveLoc')->nullable();
             $table->string('longitude_datang_real')->nullable();

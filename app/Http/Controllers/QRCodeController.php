@@ -24,7 +24,7 @@ class QRCodeController extends Controller
         QrCode::format('png')->size(200)->generate($qrCodeText, $qrImagePath);
 
         // Example email address, ganti dengan alamat email penerima
-        $recipientEmail = 'daffaaqila48@gmail.com';
+        $recipientEmail = 'example@gmail.com';
 
         // Kirim email dengan QR code sebagai lampiran
         Mail::to($recipientEmail)->send(new kirimEmail($qrImagePath));

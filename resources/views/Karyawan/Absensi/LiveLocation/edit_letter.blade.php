@@ -33,13 +33,12 @@
                                 <input id="letter_of_assignment" type="file" class="form-control"
                                     name="letter_of_assignment">
                             </div>
-
+                            <a href="{{ url()->previous() }}" class="btn btn-secondary">Back</a>
                             <button type="submit" class="btn btn-primary">
                                 Update Letter of Assignment
                             </button>
                         </form>
                     </div>
-
                 </div>
             </div>
         </div>

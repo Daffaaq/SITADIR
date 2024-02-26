@@ -48,6 +48,14 @@ class AbsensiManualController extends Controller
         // Dapatkan ID pengguna yang sedang login
         $userId = Auth::id();
 
+        $existingAbsensi = Absensi::where('user_id', $userId)
+            ->whereDate('tanggal', Carbon::now()->toDateString())
+            ->exists();
+
+        // Jika pengguna telah melakukan absensi, kembalikan dengan pesan kesalahan
+        if ($existingAbsensi) {
+            return redirect()->back()->with('error', 'Anda telah melakukan absensi datang hari ini.');
+        }
         $existingManualAbsensi = AbsensiLiveLocation::where(
             'user_id',
             $userId
@@ -72,6 +80,16 @@ class AbsensiManualController extends Controller
     public function storePulang(Request $request, $id)
     {
         $absensi = Absensi::findOrFail($id);
+        $userId = Auth::id();
+        $existingAbsensi = Absensi::where('user_id', $userId)
+            ->whereDate('tanggal', Carbon::now()->toDateString())
+            ->whereNotNull('waktu_pulang')
+            ->exists();
+
+        // Jika pengguna telah melakukan absensi, kembalikan dengan pesan kesalahan
+        if ($existingAbsensi) {
+            return response()->json(['error' => 'Maaf, Anda telah melakukan absensi pulang hari ini.'], 422);
+        }
 
         $tanggalAbsensiDatang = Carbon::parse($absensi->tanggal);
         $tanggalAbsensiPulang = Carbon::now(); // Misalkan ini adalah waktu absensi pulang, ganti dengan waktu yang sesuai dengan aplikasi Anda
