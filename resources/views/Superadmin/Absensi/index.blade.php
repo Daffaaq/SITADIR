@@ -4,7 +4,7 @@
     @foreach ($karyawanUsers as $karyawanUser)
         <div class="card shadow mb-4">
             <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary">List Permission for {{ $karyawanUser->name }}</h6>
+                <h6 class="m-0 font-weight-bold text-primary">List Attendence for {{ $karyawanUser->name }}</h6>
             </div>
             <div class="card-body">
                 <div class="table-responsive">
@@ -50,9 +50,9 @@
                             data: 'waktu_pulang',
                             name: 'waktu_pulang',
                             render: function(data) {
-                            return data ? data :
-                                'belum absensi'; // Jika data tidak null, gunakan nilainya. Jika null, gunakan "belum absensi".
-                        }
+                                return data ? data :
+                                    'belum absensi'; // Jika data tidak null, gunakan nilainya. Jika null, gunakan "belum absensi".
+                            }
                         },
                     ]
                 });

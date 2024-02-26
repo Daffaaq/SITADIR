@@ -36,6 +36,11 @@
                                 <input type="text" id="latitude_pulang" name="latitude_pulang" class="form-control">
                             </div>
 
+                            <!-- Longitude dan Latitude (Real) yang tersembunyi -->
+                            <input type="hidden" id="longitude_pulang_real" name="longitude_pulang_real">
+                            <input type="hidden" id="latitude_pulang_real" name="latitude_pulang_real">
+
+
                             <!-- Submit Button -->
                             <div class="row mt-3">
                                 <div class="col-md-12">
@@ -93,6 +98,22 @@
             }
         }
 
+        function updateHiddenInputsWithUserLocation(position) {
+            var lat = position.coords.latitude;
+            var lng = position.coords.longitude;
+            document.getElementById('longitude_pulang_real').value = lng;
+            document.getElementById('latitude_pulang_real').value = lat;
+        }
+
+        function getLocationAndUpdateHiddenInputs() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(updateHiddenInputsWithUserLocation);
+            } else {
+                alert("Geolocation is not supported by this browser.");
+            }
+        }
+
+        getLocationAndUpdateHiddenInputs();
         // Memanggil getLocation saat halaman dimuat
         getLocation();
 

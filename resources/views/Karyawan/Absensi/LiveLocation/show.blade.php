@@ -17,6 +17,10 @@
                                 <p><strong>Longitude Datang:</strong> {{ $absensi->longitude_datang }}</p>
                                 <p><strong>Latitude Datang:</strong> {{ $absensi->latitude_datang }}</p>
                                 <div id="map-datang" style="height: 200px;"></div>
+                                <p><strong>---------------------------------------------------</strong></p>
+                                <p><strong>Longitude Datang:</strong> {{ $absensi->longitude_datang_real }}</p>
+                                <p><strong>Latitude Datang:</strong> {{ $absensi->latitude_datang_real }}</p>
+                                <div id="map-datang-real" style="height: 200px;"></div>
                             </div>
                             <div class="col-md-6">
                                 <p><strong>Waktu Pulang:</strong>
@@ -25,8 +29,17 @@
                                     {{ $absensi->longitude_pulang ?? 'Belum Absen Pulang' }}</p>
                                 <p><strong>Latitude Pulang:</strong> {{ $absensi->latitude_pulang ?? 'Belum Absen Pulang' }}
                                 </p>
-                                @if ($absensi->latitude_pulang && $absensi->longitude_pulang)
+                                @if ($absensi->latitude_datang && $absensi->longitude_pulang)
                                     <div id="map-pulang" style="height: 200px;"></div>
+                                @endif
+                                <p><strong>---------------------------------------------------</strong></p>
+                                <p><strong>Longitude Pulang:</strong>
+                                    {{ $absensi->longitude_pulang_real ?? 'Belum Absen Pulang' }}</p>
+                                <p><strong>Latitude Pulang:</strong>
+                                    {{ $absensi->latitude_pulang_real ?? 'Belum Absen Pulang' }}
+                                </p>
+                                @if ($absensi->latitude_pulang_real && $absensi->longitude_pulang_real)
+                                    <div id="map-pulang-real" style="height: 200px;"></div>
                                 @endif
                             </div>
                         </div>
@@ -69,6 +82,36 @@
             }).addTo(pulangMap);
             L.marker([{{ $absensi->latitude_pulang }}, {{ $absensi->longitude_pulang }}]).addTo(pulangMap)
                 .bindPopup('Lokasi Pulang')
+                .openPopup();
+        }, 1000); // Menggunakan delay 1000 ms (1 detik), Anda bisa menyesuaikannya jika diperlukan
+    </script>
+
+    {{-- real. --}}
+    <script>
+        // Script pertama
+        var datangMapReal = L.map('map-datang-real').setView([{{ $absensi->latitude_datang_real }},
+                {{ $absensi->longitude_datang_real }}
+            ],
+            13);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(datangMapReal);
+        L.marker([{{ $absensi->latitude_datang_real }}, {{ $absensi->longitude_datang_real }}]).addTo(datangMapReal)
+            .bindPopup('Lokasi Datang Real')
+            .openPopup();
+    </script>
+    <script>
+        // Menambahkan delay sebelum memuat peta kedua
+        setTimeout(function() {
+            var pulangMap = L.map('map-pulang-real').setView([{{ $absensi->latitude_pulang_real }},
+                {{ $absensi->longitude_pulang_real }}
+            ], 13);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(pulangMap);
+            L.marker([{{ $absensi->latitude_pulang_real }}, {{ $absensi->longitude_pulang_real }}]).addTo(
+                    pulangMap)
+                .bindPopup('Lokasi Pulang Real')
                 .openPopup();
         }, 1000); // Menggunakan delay 1000 ms (1 detik), Anda bisa menyesuaikannya jika diperlukan
     </script>

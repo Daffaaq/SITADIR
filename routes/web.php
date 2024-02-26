@@ -85,6 +85,8 @@ Route::middleware(['auth', 'checkStatus:aktif', 'check.role:karyawan'])->group(f
         Route::post('/Absensi/LiveLocation/datang/storeDatang', [AbsensiLiveLocationController::class, 'storeDatang']);
         Route::get('/Absensi/LiveLocation/pulang/{id}', [AbsensiLiveLocationController::class, 'edit']);
         Route::put('/Absensi/LiveLocation/pulang/updateDatang/{id}', [AbsensiLiveLocationController::class, 'storePulang']);
+        Route::get('/Absensi/LiveLocation/edit/letter/{id}', [AbsensiLiveLocationController::class, 'edit_letter']);
+        Route::put('/Absensi/LiveLocation/Update/letter/update_letter/{id}', [AbsensiLiveLocationController::class, 'update_letter']);
         Route::get('/Absensi/LiveLocation/show/{id}', [AbsensiLiveLocationController::class, 'show']);  // Route untuk pembaruan letter of assignment
         Route::get('/Absensi/LiveLocation/data', [AbsensiLiveLocationController::class, 'json']);
     });

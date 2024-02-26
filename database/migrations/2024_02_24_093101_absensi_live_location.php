@@ -20,6 +20,10 @@ return new class extends Migration
             $table->time('waktu_pulang')->nullable();
             $table->time('waktu_datang_LiveLoc')->nullable();
             $table->time('waktu_pulang_LiveLoc')->nullable();
+            $table->string('longitude_datang_real')->nullable();
+            $table->string('latitude_datang_real')->nullable();
+            $table->string('longitude_pulang_real')->nullable();
+            $table->string('latitude_pulang_real')->nullable();
             $table->string('longitude_datang')->nullable();
             $table->string('latitude_datang')->nullable();
             $table->string('longitude_pulang')->nullable();

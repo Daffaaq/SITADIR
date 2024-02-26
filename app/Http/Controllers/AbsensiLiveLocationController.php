@@ -9,6 +9,7 @@ use Yajra\DataTables\DataTables;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class AbsensiLiveLocationController extends Controller
 {
@@ -25,7 +26,8 @@ class AbsensiLiveLocationController extends Controller
             ->addColumn('action', function ($row) {
                 $editUrl = url('/dashboardkaryawan/Absensi/LiveLocation/pulang/' . $row->id);
                 $showUrl = url('/dashboardkaryawan/Absensi/LiveLocation/show/' . $row->id);
-                return '<a href="' . $editUrl . '">Pulang</a> | <a href="' . $showUrl . '">Detail</a>';
+                $updateletterUrl = url('/dashboardkaryawan/Absensi/LiveLocation/edit/letter/' . $row->id);
+                return '<a href="' . $editUrl . '">Pulang</a> | <a href="' . $showUrl . '">Detail</a> | <a href="' . $updateletterUrl . '">Update Letter</a>';
             })
             ->toJson();
     }
@@ -45,6 +47,8 @@ class AbsensiLiveLocationController extends Controller
         $request->validate([
             'longitude_datang' => 'required',
             'latitude_datang' => 'required',
+            'longitude_datang_real' => 'required',
+            'latitude_datang_real' => 'required',
             'letter_of_assignment' => 'required|mimes:pdf,doc,docx,xls,xlsx|max:10000', // Atur ukuran maksimal file sesuai kebutuhan
         ]);
 
@@ -75,12 +79,41 @@ class AbsensiLiveLocationController extends Controller
             'waktu_datang_LiveLoc' => Carbon::now()->toTimeString(),
             'longitude_datang' => $request->longitude_datang,
             'latitude_datang' => $request->latitude_datang,
+            'longitude_datang_real' => $request->longitude_datang_real,
+            'latitude_datang_real' => $request->latitude_datang_real,
             'letter_of_assignment' => $request->file('letter_of_assignment')->store('letters_of_assignment', 'public'),
         ]);
         return redirect('/dashboardkaryawan/Absensi/LiveLocation')
             ->with('success', 'Terima kasih telah absen saat kedatangan! Data absensimu via live location sudah disimpan.');
     }
 
+    public function edit_letter(string $id)
+    {
+        $absensi = AbsensiLiveLocation::find($id);
+        return view('Karyawan.Absensi.LiveLocation.edit_letter', compact('absensi'));
+    }
+
+    public function update_letter(Request $request, $id)
+    {
+        $absensi = AbsensiLiveLocation::find($id);
+
+        // Memeriksa apakah file telah di-upload
+        if ($request->hasFile('letter_of_assignment')) {
+            // Menghapus file yang ada sebelumnya
+            Storage::delete($absensi->letter_of_assignment);
+
+            // Menyimpan file yang baru di-upload
+            $absensi->update([
+                'letter_of_assignment' => $request->file('letter_of_assignment')->store('letters_of_assignment', 'public'),
+            ]);
+
+            return redirect('/dashboardkaryawan/Absensi/LiveLocation')
+                ->with('success', 'Surat tugas berhasil diperbaharui!');
+        } else {
+            // Jika file tidak di-upload, kembalikan ke halaman sebelumnya dengan pesan error
+            return back()->withErrors(['error' => 'File surat tugas tidak di-upload.']);
+        }
+    }
     public function edit(string $id)
     {
         $absensi = AbsensiLiveLocation::find($id);
@@ -103,6 +136,8 @@ class AbsensiLiveLocationController extends Controller
         $request->validate([
             'longitude_pulang' => 'required',
             'latitude_pulang' => 'required',
+            'longitude_pulang_real' => 'required',
+            'latitude_pulang_real' => 'required',
         ]);
         $tanggalAbsensiDatang = Carbon::parse($absensi->tanggal);
         $tanggalAbsensiPulang = Carbon::now(); // Misalkan ini adalah waktu absensi pulang, ganti dengan waktu yang sesuai dengan aplikasi Anda
@@ -110,13 +145,15 @@ class AbsensiLiveLocationController extends Controller
         if ($tanggalAbsensiPulang->toDateString() != $tanggalAbsensiDatang->toDateString()) {
             // Jika tanggal absensi pulang tidak sama dengan tanggal absensi datang,
             // beri respon dengan pesan error
-            return response()->json(['error' => 'Maaf, Anda tidak dapat submit absensi pulang setelah atau pada tanggal absensi datang. Terimakasih.'], 422);
+            return redirect('/dashboardkaryawan/Absensi/LiveLocation')->with('error', 'Mohon maaf, Anda tidak dapat submit absensi pulang setelah atau pada tanggal absensi datang. Terimakasih.');
         }
         // Perbarui waktu pulang dengan waktu saat ini
         $absensi->update([
             'waktu_pulang_LiveLoc' => Carbon::now()->toTimeString(),
             'longitude_pulang' => $request->longitude_pulang,
             'latitude_pulang' => $request->latitude_pulang,
+            'longitude_pulang_real' => $request->longitude_pulang_real,
+            'latitude_pulang_real' => $request->latitude_pulang_real,
         ]);
 
         return redirect('/dashboardkaryawan/Absensi/LiveLocation')
