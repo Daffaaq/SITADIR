@@ -86,14 +86,14 @@ class SendQrCodeController extends Controller
         // Pastikan pengguna ditemukan dan memiliki peran 'karyawan'
         if ($user && $user->role === 'karyawan') {
             // Generate kode unik untuk QR code
-            $code = 'ID' . $user->id . '_' . Str::slug($user->name) . '_' . Str::slug($user->email) . '_' . Str::random(3);
+            $code = 'ATTDNP' . Str::random(6);
 
             // Generate QR Code pulang dengan informasi yang sesuai (misalnya, kode unik)
             $qrCodeData = $code;
             $qrCode = QrCode::format('png')->size(200)->generate($qrCodeData);
 
             // Simpan QR Code pulang ke dalam penyimpanan yang dapat diakses oleh pengguna
-            $qrCodePathPulang = 'qrcodes/' . $qrCodeData . '_qr_code_pulang.png';
+            $qrCodePathPulang = 'qrcodes/' . $qrCodeData . '.png';
             Storage::disk('public')->put($qrCodePathPulang, $qrCode);
 
             // Perbarui informasi QR code di database jika sudah ada, jika tidak, buat entri baru

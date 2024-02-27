@@ -22,6 +22,6 @@ class AbsensiQrCode extends Model
      */
     public function qrcode()
     {
-        return $this->belongsTo(QrCodeGen::class);
+        return $this->belongsTo(QrCodeGen::class, 'Qr_code_id'); // Sesuaikan dengan nama foreign key yang digunakan
     }
 }
