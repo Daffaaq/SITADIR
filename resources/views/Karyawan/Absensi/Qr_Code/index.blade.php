@@ -33,8 +33,12 @@
             <h6 class="m-0 font-weight-bold text-primary">Absensi Manual</h6>
         </div>
         <div class="card-body">
-            <a href="#" class="btn btn-success float-right mb-3" data-toggle="modal" data-target="#scannerModal">
+            {{-- <a href="#" id="addTiket" class="btn btn-success float-right mb-3" data-toggle="modal"
+                data-target="#scannerModal">
                 <i class="fas fa-plus"></i> Open Camera
+            </a> --}}
+            <a href="{{ url('/dashboardkaryawan/Absensi/QrCode/datang') }}" class="btn btn-success float-right mb-3">
+                <i class="fas fa-plus"></i> Create Absensi Live Location
             </a>
             <div class="table-responsive">
                 <table class="table table-bordered" id="usersTable" width="100%" cellspacing="0">
@@ -125,7 +129,7 @@
             });
         });
     </script>
-    <script>
+    {{-- <script>
         $(document).ready(function() {
             var html5QrCode;
             var codeQr;
@@ -143,6 +147,7 @@
                     $('#scannerModal').modal('hide');
                     $('#addScanModal').modal('show');
                     // add
+                    scanQRCode(codeQr);
                     html5QrCode.stop().then(ignore => {
                         $('#scannerModal').modal('hide');
                     }).catch(err => {
@@ -164,13 +169,13 @@
             // Fungsi untuk menangani hasil scan QR Code
             function scanQRCode(qrCode) {
                 $.ajax({
-                    url: '/dashboardkaryawan/Qr-Code/scan',
+                    url: '/dashboardkaryawan/Absensi/QrCode/scan/Store',
                     type: 'POST',
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
                     data: {
-                        qr_code_data: qrCode
+                        qr_code_datang: qrCode
                     },
                     success: function(response) {
                         console.log(response.message);
@@ -188,10 +193,10 @@
                 event.preventDefault();
                 // var qrCode = codeQr;
                 var formData = new FormData($('#addDataForm')[0]);
-                formData.append('qr_code_data', codeQr);
+                formData.append('qr_code_datang', codeQr);
                 console.log(codeQr);
                 $.ajax({
-                    url: "{{ url('/dashboardkaryawan/Qr-Code/scan') }}",
+                    url: "{{ url('/dashboardkaryawan/Absensi/QrCode/scan/Store') }}",
                     type: 'POST',
                     data: formData,
                     contentType: false,
@@ -206,11 +211,51 @@
                 });
             });
 
+        });
+        $(document).ready(function() {
+            var html5QrCode;
 
-            // Tombol untuk membuka scanner modal
-            $('#addTiket').click(function() {
-                $('#scannerModal').modal('show');
+            // Inisialisasi dan konfigurasi scanner QR Code
+            $('#scannerModal').on('show.bs.modal', function(e) {
+                html5QrCode = new Html5Qrcode("qr-reader");
+                html5QrCode.start({
+                    facingMode: "environment"
+                }, {
+                    fps: 10,
+                    qrbox: 250
+                }, qrCodeMessage => {
+                    console.log(qrCodeMessage);
+                    // Tambahkan logika untuk mengirimkan data QR code ke endpoint yang sesuai melalui AJAX
+                    $.ajax({
+                        url: '/dashboardkaryawan/Absensi/QrCode/scan/Store',
+                        type: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        data: {
+                            qr_code_datang: qrCodeMessage
+                        },
+                        success: function(response) {
+                            console.log(response.message);
+                            // Tampilkan pesan sukses atau lakukan tindakan lain sesuai kebutuhan
+                        },
+                        error: function(xhr, status, error) {
+                            console.log(error);
+                            // Tampilkan pesan error atau lakukan tindakan lain sesuai kebutuhan
+                        }
+                    });
+                }).catch(err => {
+                    console.log(`Unable to start the QR Code scanner, reason: ${err}`);
+                });
+            });
+
+            $('#scannerModal').on('hide.bs.modal', function(e) {
+                if (html5QrCode) {
+                    html5QrCode.stop().then(ignore => {}).catch(err => {
+                        console.log(`Unable to stop the QR Code scanner, reason: ${err}`);
+                    });
+                }
             });
         });
-    </script>
+    </script> --}}
 @endsection

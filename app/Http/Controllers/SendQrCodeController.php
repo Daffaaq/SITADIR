@@ -51,14 +51,15 @@ class SendQrCodeController extends Controller
             // }
 
             // Generate kode unik untuk QR code
-            $code = 'ID' . $user->id . '_' . Str::slug($user->name) . '_' . Str::slug($user->email) . '_' . Str::random(3);
+            // $code = 'ID' . $user->id . '_' . Str::slug($user->name) . '_' . Str::slug($user->email) . '_' . Str::random(3);
+            $code = 'ATTDN' . Str::random(6);
 
             // Generate QR Code datang dengan informasi yang sesuai (misalnya, kode unik)
             $qrCodeData = $code;
             $qrCode = QrCode::format('png')->size(200)->generate($qrCodeData);
 
             // Simpan QR Code datang ke dalam penyimpanan yang dapat diakses oleh pengguna
-            $qrCodePathDatang = 'qrcodes/' . $qrCodeData . '_qr_code_datang.png';
+            $qrCodePathDatang = 'qrcodes/' . $qrCodeData . '.png';
             Storage::disk('public')->put($qrCodePathDatang, $qrCode);
 
             // Simpan informasi QR code ke dalam database

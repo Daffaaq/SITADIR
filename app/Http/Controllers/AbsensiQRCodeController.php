@@ -6,6 +6,7 @@ use App\Models\AbsensiQrCode;
 use App\Models\QrCodeGen;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
+use Illuminate\Support\Facades\Log;
 
 class AbsensiQRCodeController extends Controller
 {
@@ -32,13 +33,24 @@ class AbsensiQRCodeController extends Controller
         return view('Karyawan.Absensi.Qr_Code.index', ['absensi' => $absensi]);
     }
 
+
+    public function datang()
+    {
+        return view('Karyawan.Absensi.Qr_Code.datang');
+    }
+
     public function scanQrCodeDatang(Request $request)
     {
         $user = auth()->user(); // Mendapatkan informasi pengguna yang melakukan aksi
-        $qrCodeData = $request->input('qr_code_data');
-        $qrCodes = QrCodeGen::where('code_datang', $qrCodeData)->first();
+        $qrCodeData = $request->input('qr_code_datang');
+        $qrCodes = QrCodeGen::where('code_datang', $qrCodeData)
+            ->where('user_id', $user->id) // Sesuaikan dengan nama kolom yang sesuai dalam tabel QR code
+            ->first();
+        Log::info('Nilai $qrCodeData: ' . $qrCodeData);
+        // $qrCodes = QrCodeGen::where('code_datang', $qrCodeData)->first();
+        Log::info('Nilai $qrCodeData 2: ' . $qrCodes->code_datang);
         if (!$qrCodes) {
-            return response()->json(['message' => 'Qr Code not found'], 404);
+            return response()->json(['message' => 'Qr Code not found'], 400);
         } // Mendapatkan data dari QR code yang discan
         AbsensiQrCode::create([
             'Qr_code_id' => $qrCodes->id,
@@ -46,7 +58,7 @@ class AbsensiQRCodeController extends Controller
             'waktu_datang_Qr_code' => now()->toTimeString(),
         ]);
 
-        return response()->json(['message' => 'Absensi berhasil dicatat.']);
+        return response()->json(['message' => 'Absensi berhasil dicatat.'], 200);
     }
     public function uploadQrCodeDatang(Request $request)
     {
@@ -62,7 +74,7 @@ class AbsensiQRCodeController extends Controller
             'waktu_datang_Qr_code' => now()->toTimeString(),
         ]);
 
-        return response()->json(['message' => 'Absensi berhasil dicatat.']);
+        return response()->json(['message' => 'Absensi berhasil dicatat.'], 200);
     }
     public function scanQrCodePulang(Request $request, $id)
     {

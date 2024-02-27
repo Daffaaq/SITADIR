@@ -83,7 +83,6 @@ Route::middleware(['auth', 'checkStatus:aktif', 'check.role:karyawan'])->group(f
     });
     Route::prefix('/dashboardkaryawan')->group(function () {
         Route::get('/Qr-Code', [SendQrCodeController::class, 'indexKaryawan']);
-        Route::post('/Qr-Code/scan', [SendQrCodeController::class, 'scanQrCodeDatang']);
     });
     Route::prefix('/dashboardkaryawan')->group(function () {
         Route::get('/Absensi/Manual', [AbsensiManualController::class, 'index']);
@@ -93,7 +92,8 @@ Route::middleware(['auth', 'checkStatus:aktif', 'check.role:karyawan'])->group(f
     });
     Route::prefix('/dashboardkaryawan')->group(function () {
         Route::get('/Absensi/QrCode', [AbsensiQRCodeController::class, 'index']);
-        Route::post('/Absensi/QrCode/scan/Store', [AbsensiQRCodeController::class, 'scanQrCodeDatang']);
+        Route::get('/Absensi/QrCode/datang', [AbsensiQRCodeController::class, 'datang']);
+        Route::post('/Absensi/QrCode/datang/scan/Store', [AbsensiQRCodeController::class, 'scanQrCodeDatang'])->name('scan.qrcode.datang');
         Route::post('/Absensi/QrCode/upload/Store', [AbsensiQRCodeController::class, 'uploadQrCodeDatang']);
         Route::put('/Absensi/QrCode/scan/Pulang/{id}', [AbsensiQRCodeController::class, 'scanQrCodePulang']);
         Route::put('/Absensi/QrCode/upload/Pulang/{id}', [AbsensiQRCodeController::class, 'uploadQrCodePulang']);
