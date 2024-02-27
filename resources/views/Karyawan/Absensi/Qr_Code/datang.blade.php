@@ -25,7 +25,32 @@
             </div>
         </div>
     </div>
-
+    <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="pulangModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="errorModalLabel">Absensi Datang</h5>
+                </div>
+                <div class="modal-body">
+                    <p>Error sam</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="infoModal" tabindex="-1" role="dialog" aria-labelledby="pulangModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="infoModalLabel">Absensi Datang</h5> <!-- Ganti id modal title -->
+                </div>
+                <div class="modal-body">
+                    <p>Mohon Maaf anda Absensi Datang 2 kali</p>
+                </div>
+            </div>
+        </div>
+    </div>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
@@ -55,10 +80,24 @@
                         window.location.href = '/dashboardkaryawan/Absensi/QrCode';
                     },
                     error: function(error) {
-                        console.log(response);
-                        alert('gagal');
-                        window.location.reload();
-                    }
+                        if (error.responseJSON && error.responseJSON.message) {
+                            // Ini menangkap pesan dari server jika status code 400 dan memiliki kunci 'message'
+                            $('#infoModal').modal('show');
+                            console.log(error.responseJSON.message);
+                            setTimeout(function() {
+                                $('#infoModal').modal('hide');
+                                window.location.href = '/dashboardkaryawan/Absensi/QrCode';
+                            }, 2500);
+                        } else {
+                            // Jika tidak ada pesan yang diharapkan, tampilkan modal error
+                            $('#errorModal').modal('show');
+                            console.log(error);
+                            setTimeout(function() {
+                                $('#errorModal').modal('hide');
+                                window.location.href = '/dashboardkaryawan/Absensi/QrCode';
+                            }, 2500);
+                        }
+                    },
 
                 });
             }).catch(error => {

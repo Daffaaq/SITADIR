@@ -59,15 +59,24 @@ class AbsensiQRCodeController extends Controller
         // $qrCodes = QrCodeGen::where('code_datang', $qrCodeData)->first();
         Log::info('Nilai $qrCodeData 2: ' . $qrCodes->code_datang);
         if (!$qrCodes) {
-            return response()->json(['message' => 'Qr Code not found'], 400);
+            return response()->json(['error' => 'Qr Code not found'], 400);
         } // Mendapatkan data dari QR code yang discan
+
+        $qrCodeScan = AbsensiQrCode::where('Qr_code_id', $qrCodes->id)
+            ->whereDate('tanggal', now()->toDateString())
+            ->exists();
+
+        if ($qrCodeScan) {
+            // return redirect('/dashboardkaryawan/Absensi/LiveLocation')->with('error', 'QR Code sudah discan sebelumnya.');
+            return response()->json(['message' => 'QR Code sudah discan sebelumnya.'], 400);
+        }
         AbsensiQrCode::create([
             'Qr_code_id' => $qrCodes->id,
             'tanggal' => now()->toDateString(),
             'waktu_datang_Qr_code' => now()->toTimeString(),
         ]);
 
-        return response()->json(['message' => 'Absensi berhasil dicatat.'], 200);
+        return response()->json(['success' => 'Absensi berhasil dicatat.'], 200);
     }
 
     public function pulang(string $id)
@@ -81,6 +90,7 @@ class AbsensiQRCodeController extends Controller
         if (!$absensi) {
             return response()->json(['message' => 'id not found'], 400);
         }
+
         $user = auth()->user(); // Mendapatkan informasi pengguna yang melakukan aksi
         $qrCodeData = $request->input('qr_code_pulang'); // Mendapatkan data dari QR code yang discan
         $qrCodes = QrCodeGen::where('code_pulang', $qrCodeData)
@@ -93,7 +103,13 @@ class AbsensiQRCodeController extends Controller
             return response()->json(['message' => 'Qr Code not found'], 400);
         } // Mendapatkan data dari QR code yang dis
         // Lakukan sesuai kebutuhan Anda, misalnya verifikasi QR code, validasi waktu, dll.
+        $qrCodeScan = AbsensiQrCode::where('Qr_code_id', $qrCodes->id)
+            ->whereDate('tanggal', now()->toDateString())
+            ->exists();
 
+        if ($qrCodeScan) {
+            return response()->json(['error' => 'QR Code sudah discan sebelumnya.'], 400);
+        }
         // Perbarui waktu_pulang_Qr_code untuk entri absensi yang ditemukan
         $absensi->update([
             'waktu_pulang_Qr_code' => now()->toTimeString(),

@@ -25,7 +25,19 @@
             </div>
         </div>
     </div>
-
+    <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="pulangModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="errorModalLabel">Absensi Pulang</h5>
+                </div>
+                <div class="modal-body">
+                    <p>Mohon Maaf anda Absensi Pulang 2 kali</p>
+                </div>
+            </div>
+        </div>
+    </div>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
@@ -56,11 +68,13 @@
                         window.location.href = '/dashboardkaryawan/Absensi/QrCode';
                     },
                     error: function(error) {
-                        console.log(response);
-                        alert('gagal');
-                        window.location.reload();
+                        $('#errorModal').modal('show');
+                        console.log(error); // Perbaikan: Menggunakan error, bukan response
+                        setTimeout(function() {
+                            $('#errorModal').modal('hide');
+                            window.location.href = '/dashboardkaryawan/Absensi/QrCode';
+                        }, 2500);
                     }
-
                 });
             }).catch(error => {
                 alert('something wrong');
