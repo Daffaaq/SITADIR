@@ -41,11 +41,22 @@ class AbsensiQRCodeController extends Controller
         // Kirim data absensi ke tampilan
         return view('Karyawan.Absensi.Qr_Code.index', ['absensi' => $absensi]);
     }
+    public function index1()
+    {
+        $absensi = AbsensiQrCode::all(); // Sesuaikan dengan cara Anda mengambil data absensi
+
+        // Kirim data absensi ke tampilan
+        return view('Karyawan.Absensi.Qr_Code1.index', ['absensi' => $absensi]);
+    }
 
 
     public function datang()
     {
         return view('Karyawan.Absensi.Qr_Code.datang');
+    }
+    public function datang1()
+    {
+        return view('Karyawan.Absensi.Qr_Code1.datang');
     }
 
     public function scanQrCodeDatang(Request $request)
@@ -101,20 +112,18 @@ class AbsensiQRCodeController extends Controller
         Log::info('Nilai $qrCodeData 2: ' . $qrCodes->code_pulang);
         if (!$qrCodes) {
             return response()->json(['message' => 'Qr Code not found'], 400);
-        } // Mendapatkan data dari QR code yang dis
-        // Lakukan sesuai kebutuhan Anda, misalnya verifikasi QR code, validasi waktu, dll.
-        $qrCodeScan = AbsensiQrCode::where('Qr_code_id', $qrCodes->id)
-            ->whereDate('tanggal', now()->toDateString())
-            ->exists();
+        } // Mendapatkan data dari QR code yang discan
+        // return response()->json(['message' => 'Waktu pulang berhasil diperbarui.']);
+        if ($absensi->waktu_pulang_Qr_code === null) {
+            // Jika masih null, update waktu_pulang_Qr_code dengan waktu sekarang
+            $absensi->update([
+                'waktu_pulang_Qr_code' => now()->toTimeString(),
+            ]);
 
-        if ($qrCodeScan) {
-            return response()->json(['error' => 'QR Code sudah discan sebelumnya.'], 400);
+            return response()->json(['message' => 'Waktu pulang berhasil diperbarui.']);
+        } else {
+            // Jika waktu_pulang_Qr_code sudah memiliki nilai, kembalikan pesan kesalahan
+            return response()->json(['message' => 'Data waktu pulang sudah ada.'], 400);
         }
-        // Perbarui waktu_pulang_Qr_code untuk entri absensi yang ditemukan
-        $absensi->update([
-            'waktu_pulang_Qr_code' => now()->toTimeString(),
-        ]);
-
-        return response()->json(['message' => 'Waktu pulang berhasil diperbarui.']);
     }
 }

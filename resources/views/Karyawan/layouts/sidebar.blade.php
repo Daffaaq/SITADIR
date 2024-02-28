@@ -65,6 +65,8 @@
                             href="{{ url('/dashboardkaryawan/Absensi/LiveLocation') }}">Live Location Absensi</a>
                         <a class="collapse-item {{ request()->is('dashboardkaryawan/Absensi/QrCode') ? 'active' : '' }}"
                             href="{{ url('/dashboardkaryawan/Absensi/QrCode') }}">Qr Code Absensi</a>
+                        <a class="collapse-item {{ request()->is('dashboardkaryawan/Absensi/QrCode1') ? 'active' : '' }}"
+                            href="{{ url('/dashboardkaryawan/Absensi/QrCode1') }}">Qr Code Absensi 1</a>
                     </div>
                 </div>
             </li>

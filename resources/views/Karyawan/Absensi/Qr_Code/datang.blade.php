@@ -5,7 +5,7 @@
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="card">
-                    <div class="card-header">Create New Permission</div>
+                    <div class="card-header">Create New Attendance</div>
 
                     <div class="card-body">
                         @if ($errors->any())
@@ -22,9 +22,12 @@
             </div>
             <div class="col-md-8">
                 <div id="reader" style="height: 300px;"></div>
+                <input type="hidden" id="qr_code_result" name="qr_code_result" value="">
             </div>
         </div>
     </div>
+    <!-- Other HTML content -->
+
     <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="pulangModalLabel"
         aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -51,17 +54,17 @@
             </div>
         </div>
     </div>
+
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
         integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
 
-    <script>
+    <script type="text/javascript">
         function onScanSuccess(decodedText, decodedResult) {
-            // handle the scanned code as you like, for example:
             console.log(`Code matched = ${decodedText}`, decodedResult);
-            $('#result').val(decodedText);
+            $('#qr_code_result').val(decodedText); // Set value to hidden input
             let id = decodedText;
             html5QrcodeScanner.clear().then(_ => {
                 var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
@@ -81,7 +84,6 @@
                     },
                     error: function(error) {
                         if (error.responseJSON && error.responseJSON.message) {
-                            // Ini menangkap pesan dari server jika status code 400 dan memiliki kunci 'message'
                             $('#infoModal').modal('show');
                             console.log(error.responseJSON.message);
                             setTimeout(function() {
@@ -89,7 +91,6 @@
                                 window.location.href = '/dashboardkaryawan/Absensi/QrCode';
                             }, 2500);
                         } else {
-                            // Jika tidak ada pesan yang diharapkan, tampilkan modal error
                             $('#errorModal').modal('show');
                             console.log(error);
                             setTimeout(function() {
@@ -97,8 +98,7 @@
                                 window.location.href = '/dashboardkaryawan/Absensi/QrCode';
                             }, 2500);
                         }
-                    },
-
+                    }
                 });
             }).catch(error => {
                 alert('something wrong');

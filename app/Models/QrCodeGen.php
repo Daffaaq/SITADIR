@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class QrCodeGen extends Model
 {
     use HasFactory;
-    protected $fillable = ['user_id', 'code_datang', 'qr_code_datang', 'code_pulang', 'qr_code_pulang'];
+    protected $fillable = ['user_id', 'tanggal_kirim_datang', 'jam_kirim_datang', 'tanggal_kirim_pulang', 'jam_kirim_pulang' ,'code_datang', 'qr_code_datang', 'code_pulang', 'qr_code_pulang'];
 
     public function user()
     {

@@ -15,6 +15,10 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users');
+            $table->date('tanggal_kirim_datang')->nullable();
+            $table->time('jam_kirim_datang')->nullable();
+            $table->date('tanggal_kirim_pulang')->nullable();
+            $table->time('jam_kirim_pulang')->nullable();
             $table->string('code_datang')->unique();
             $table->string('qr_code_datang')->nullable();
             $table->string('code_pulang')->unique()->nullable();

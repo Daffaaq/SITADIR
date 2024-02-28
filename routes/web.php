@@ -100,6 +100,11 @@ Route::middleware(['auth', 'checkStatus:aktif', 'check.role:karyawan'])->group(f
         Route::get('/Absensi/QrCode/data', [AbsensiQRCodeController::class, 'json']);
     });
     Route::prefix('/dashboardkaryawan')->group(function () {
+        Route::get('/Absensi/QrCode1', [AbsensiQRCodeController::class, 'index1']);
+        Route::get('/Absensi/QrCode1/datang1', [AbsensiQRCodeController::class, 'datang1']);
+        Route::get('/Absensi/QrCode1/pulang1/{id}', [AbsensiQRCodeController::class, 'pulang']);
+    });
+    Route::prefix('/dashboardkaryawan')->group(function () {
         Route::get('/Absensi/LiveLocation', [AbsensiLiveLocationController::class, 'index']);
         Route::get('/Absensi/LiveLocation/datang', [AbsensiLiveLocationController::class, 'create']);
         Route::post('/Absensi/LiveLocation/datang/storeDatang', [AbsensiLiveLocationController::class, 'storeDatang']);

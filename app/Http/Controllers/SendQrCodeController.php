@@ -65,6 +65,8 @@ class SendQrCodeController extends Controller
             // Simpan informasi QR code ke dalam database
             QrCodeGen::create([
                 'user_id' => $user->id,
+                'tanggal_kirim_datang'=> now()->toDateString(),
+                'jam_kirim_datang'=> now()->toTimeString(),
                 'code_datang' => $qrCodeData,
                 'qr_code_datang' => $qrCodePathDatang,
             ]);
@@ -100,12 +102,16 @@ class SendQrCodeController extends Controller
             $qrCodeGen = QrCodeGen::where('user_id', $user->id)->first();
             if ($qrCodeGen) {
                 $qrCodeGen->update([
+                    'tanggal_kirim_pulang' => now()->toDateString(),
+                    'jam_kirim_pulang' => now()->toTimeString(),
                     'code_pulang' => $qrCodeData,
                     'qr_code_pulang' => $qrCodePathPulang,
                 ]);
             } else {
                 QrCodeGen::create([
                     'user_id' => $user->id,
+                    'tanggal_kirim_datang' => now()->toDateString(),
+                    'jam_kirim_datang' => now()->toTimeString(),
                     'code_pulang' => $qrCodeData,
                     'qr_code_pulang' => $qrCodePathPulang,
                 ]);

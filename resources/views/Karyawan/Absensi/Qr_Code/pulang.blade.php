@@ -5,7 +5,7 @@
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="card">
-                    <div class="card-header">Create New Permission</div>
+                    <div class="card-header">Create New Attendance</div>
 
                     <div class="card-body">
                         @if ($errors->any())
@@ -22,9 +22,13 @@
             </div>
             <div class="col-md-8">
                 <div id="reader" style="height: 300px;"></div>
+                <input type="hidden" id="qr_code_result" name="qr_code_result" value="">
             </div>
         </div>
     </div>
+
+    <!-- Other HTML content -->
+
     <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="pulangModalLabel"
         aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -38,6 +42,7 @@
             </div>
         </div>
     </div>
+
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
@@ -48,10 +53,10 @@
         var id = {{ $id }};
 
         function onScanSuccess(decodedText, decodedResult) {
-            // handle the scanned code as you like, for example:
             console.log(`Code matched = ${decodedText}`, decodedResult);
+            $('#qr_code_result').val(decodedText);
+            let id1 = decodedText;
             html5QrcodeScanner.clear().then(_ => {
-                let id1 = decodedText;
                 var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
                 var url = '/dashboardkaryawan/Absensi/QrCode/Pulang/scan/' + id;
                 console.log(url)
