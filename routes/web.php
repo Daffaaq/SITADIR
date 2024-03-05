@@ -129,6 +129,7 @@ Route::middleware(['auth', 'checkStatus:aktif', 'check.role:supervisor'])->group
         Route::get('/Rekap_Permission/accepted/{id}', [SupervisorPermissionController::class, 'approveindex']);
         Route::get('/Rekap_Permission/rejected/{id}', [SupervisorPermissionController::class, 'rejectindex']);
         Route::put('/Rekap_Permission/accepted/update/{id}', [SupervisorPermissionController::class, 'approve']);
+        Route::put('/Rekap_Permission/accepted/{id}/generateletter', [SupervisorPermissionController::class, 'generateletter']);
         Route::put('/Rekap_Permission/rejected/update/{id}', [SupervisorPermissionController::class, 'reject']);
         Route::get('/Rekap_Permission/data/{userId}', [SupervisorPermissionController::class, 'json'])->name('get.recap.Permission.supervisor');
     });

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Permission;
+use Illuminate\Support\Facades\Response;
 use Yajra\DataTables\DataTables;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -74,6 +75,39 @@ class SupervisorPermissionController extends Controller
         return view('Supervisor.Permission.rejectede', compact('permission'));
     }
 
+    // public function approve(Request $request, $id)
+    // {
+    //     // Temukan permission berdasarkan ID
+    //     $permission = Permission::findOrFail($id);
+
+    //     if (Auth::user()->role !== 'supervisor') {
+    //         return response()->json(['error' => 'You are not authorized to reject permissions.'], 403);
+    //     }
+    //     // Lakukan validasi terhadap data yang diterima dari form approval
+    //     $request->validate([
+    //         'supervisor_comment' => 'nullable|string',
+    //         'supervisor_letter' => 'nullable|mimes:pdf,doc,docx,xls,xlsx|max:10000',
+    //         // Validasi file
+    //     ]);
+    //     $path = null;
+    //     // Simpan file supervisor_letter
+    //     if ($request->hasFile('supervisor_letter')) {
+    //         $file = $request->file('supervisor_letter');
+    //         $path = $file->store('supervisor_letters', 'public'); // Simpan file ke penyimpanan 'public'
+    //     }
+
+
+    //     // Update data permission dengan informasi dari form approval
+    //     $permission->status = 'approved';
+    //     $permission->supervisor_comment = $request->input('supervisor_comment');
+    //     $permission->supervisor_letter = $path;
+    //     $permission->save();
+
+    //     // Mengembalikan respons JSON
+    //     return redirect('/dashboardsupervisor/Rekap_Permission')
+    //         ->with('success', 'Permission approved successfully.');
+    // }
+
     public function approve(Request $request, $id)
     {
         // Temukan permission berdasarkan ID
@@ -82,29 +116,51 @@ class SupervisorPermissionController extends Controller
         if (Auth::user()->role !== 'supervisor') {
             return response()->json(['error' => 'You are not authorized to reject permissions.'], 403);
         }
-        // Lakukan validasi terhadap data yang diterima dari form approval
-        $request->validate([
-            'supervisor_comment' => 'nullable|string',
-            'supervisor_letter' => 'nullable|mimes:pdf,doc,docx,xls,xlsx|max:10000',
-            // Validasi file
-        ]);
-        $path = null;
-        // Simpan file supervisor_letter
-        if ($request->hasFile('supervisor_letter')) {
-            $file = $request->file('supervisor_letter');
-            $path = $file->store('supervisor_letters', 'public'); // Simpan file ke penyimpanan 'public'
-        }
 
-
-        // Update data permission dengan informasi dari form approval
+        // Update status permission menjadi 'approved'
         $permission->status = 'approved';
-        $permission->supervisor_comment = $request->input('supervisor_comment');
-        $permission->supervisor_letter = $path;
         $permission->save();
 
-        // Mengembalikan respons JSON
+        // Memanggil fungsi generateletter untuk menghasilkan surat supervisor
+        $this->generateletter($request, $id);
+
+        // Mengembalikan respons redirect
         return redirect('/dashboardsupervisor/Rekap_Permission')
-            ->with('success', 'Permission approved successfully.');
+        ->with('success', 'Permission approved successfully.');
+    }
+
+    public function generateletter(Request $request, $id)
+    {
+        // Temukan permission berdasarkan ID
+        $permission = Permission::findOrFail($id);
+        $templatePath = public_path('assets/format/TEMPLATE_SURAT_PERIZINAN.docx');
+        $fileName = 'SURAT_SELDIK_' . $permission->id . '.docx';
+        $filePath = public_path('assets/result/surat/' . $fileName);
+        $phpWord = new \PhpOffice\PhpWord\TemplateProcessor($templatePath);
+
+        $nama = $permission->user->name;
+        $email = $permission->user->email;
+        $explanation = $permission->explanation;
+        $permission_type = $permission->permission_type;
+        $start_date = $permission->start_date;
+        $end_date = $permission->end_date;
+        $date = Carbon::now()->format('d-m-Y');
+        $status = $permission->status;
+        $supervisor_comment = $permission->supervisor_comment;
+
+        $phpWord->setValue('nama', $nama);
+        $phpWord->setValue('email', $email);
+        $phpWord->setValue('explanation', $explanation);
+        $phpWord->setValue('permission_type', $permission_type);
+        $phpWord->setValue('start_date', $start_date);
+        $phpWord->setValue('end_date', $end_date);
+        $phpWord->setValue('date', $date);
+        $phpWord->setValue('status', $status);
+        $phpWord->setValue('supervisor_comment', $supervisor_comment);
+
+        $phpWord->saveAs($filePath);
+        // Mengembalikan respons JSON
+        return Response::download($filePath, $fileName);
     }
 
 

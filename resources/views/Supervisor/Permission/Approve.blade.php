@@ -26,10 +26,6 @@
                             <label for="supervisor_comment">Supervisor Comment:</label><br>
                             <textarea id="supervisor_comment" name="supervisor_comment"></textarea><br>
 
-                            <!-- Tambahkan input untuk supervisor_letter (opsional) -->
-                            <label for="supervisor_letter">Supervisor Letter:</label><br>
-                            <input type="file" id="supervisor_letter" name="supervisor_letter"><br>
-
                             <!-- Submit Button -->
                             <div class="row mt-3">
                                 <div class="col-md-12">

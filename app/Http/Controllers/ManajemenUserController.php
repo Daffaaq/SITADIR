@@ -147,7 +147,7 @@ class ManajemenUserController extends Controller
         $user = User::findOrFail($id);
 
         // Validasi input
-        $request->validate([
+        $request->validate([         
             'name' => 'required',
             'email' => 'required|email|unique:users,email,' . $id,
             'password' => 'nullable',

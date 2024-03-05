@@ -83,10 +83,10 @@ class SendQrCodeController extends Controller
     public function sendQrCodeToUserPulang(string $id)
     {
         // Temukan pengguna dengan ID yang diberikan
-        $user = User::findOrFail($id);
+        $qrCodeGen = QrCodeGen::findOrFail($id);
 
         // Pastikan pengguna ditemukan dan memiliki peran 'karyawan'
-        if ($user && $user->role === 'karyawan') {
+        if ($qrCodeGen && $qrCodeGen->user->role === 'karyawan') {
             // Generate kode unik untuk QR code
             $code = 'ATTDNP' . Str::random(6);
 
@@ -99,7 +99,6 @@ class SendQrCodeController extends Controller
             Storage::disk('public')->put($qrCodePathPulang, $qrCode);
 
             // Perbarui informasi QR code di database jika sudah ada, jika tidak, buat entri baru
-            $qrCodeGen = QrCodeGen::where('user_id', $user->id)->first();
             if ($qrCodeGen) {
                 $qrCodeGen->update([
                     'tanggal_kirim_pulang' => now()->toDateString(),
@@ -109,7 +108,7 @@ class SendQrCodeController extends Controller
                 ]);
             } else {
                 QrCodeGen::create([
-                    'user_id' => $user->id,
+                    'user_id' => $qrCodeGen->user_id,
                     'tanggal_kirim_datang' => now()->toDateString(),
                     'jam_kirim_datang' => now()->toTimeString(),
                     'code_pulang' => $qrCodeData,
@@ -118,12 +117,13 @@ class SendQrCodeController extends Controller
             }
 
             // Jika QR Code berhasil dikirim, kembalikan respons sukses dalam format JSON
-            return response()->json(['message' => 'QR Code Pulang berhasil dikirim ke ' . $user->name]);
+            return response()->json(['message' => 'QR Code Pulang berhasil dikirim ke ' . $qrCodeGen->user->name]);
         }
 
         // Jika pengguna tidak ditemukan atau bukan karyawan, kembalikan respons gagal dalam format JSON
         return response()->json(['error' => 'Gagal mengirim QR Code Pulang. Pengguna tidak ditemukan atau bukan karyawan.'], 404);
     }
+
 
 
 
@@ -149,9 +149,17 @@ class SendQrCodeController extends Controller
     public function indexKaryawan()
     {
         $user = auth()->user();
-        $qrCodes = QrCodeGen::where('user_id', $user->id)->get();
+        $today = now()->format('Y-m-d');
+        $qrCode = QrCodeGen::where('tanggal_kirim_datang', $today)
+            ->where('tanggal_kirim_pulang', $today)
+            ->where('user_id', $user->id)
+            ->first();
+        // dd($qrcode);
+        // $qrCodes = QrCodeGen::where('user_id', $user->id)->first();
+        // dd($qrCodes);
         // Kembalikan kedua path QR Code ke tampilan
-        return view('Karyawan.Qr_Code.index', ['qrCodes' => $qrCodes]);
+        // return view('Karyawan.Qr_Code.index', ['prima' => $qrCodes]); //manipulasi variabel ke view
+        return view('Karyawan.Qr_Code.index', compact('qrCode'));
     }
 
     // public function indexKaryawan()
